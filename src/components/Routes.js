@@ -5,13 +5,14 @@ import {
 } from "react-router-dom";
 import Home from "./Home";
 import Login from "./Login";
-
+import Register from "./Register"
 
 const AppRoutes = () => {
 
     const route_config = [
         { path: "/", component: Home, exact:true },
-        { path: "/login", component: Login, exact:true }
+        { path: "/login", component: Login, exact:true },
+        { path: "/register", component: Register, exact:true }
     ]
 
 
