@@ -6,7 +6,12 @@ import { userLoggedIn } from "../store/auth/selector";
 import { useSelector, useDispatch } from 'react-redux'
 import React from "react";
 import { logOut } from "../store/auth/reducer";
+import styled from "styled-components";
 
+const StyledAppBar = styled(AppBar)`
+    background-color: rgb(42, 65, 44);
+    color: white;
+`
 
 function Navbar() {
     const history = useHistory();
@@ -30,7 +35,7 @@ function Navbar() {
     }
 
     return (
-        <AppBar position="sticky">
+        <StyledAppBar position="sticky" color="inherit">
             <Grid container direction="row" justify="space-between" alignItems="center">
 
                 <Grid container item xs={4} direction="row" justify="flex-start" alignItems="center">
@@ -47,7 +52,7 @@ function Navbar() {
                     <Grid item xs={3} component={Button} color="inherit" onClick={() => { dispatch(logOut())}}><h3>Cart</h3></Grid>
                 </Grid>
             </Grid>
-        </AppBar>
+        </StyledAppBar>
     );
 }
 

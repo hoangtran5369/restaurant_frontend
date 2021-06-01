@@ -1,34 +1,81 @@
-import { Box, Button, Divider, Grid, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
+import styled from "styled-components"
 
+const FooterContainer = styled.div`
+    height: 20vh;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(42, 65, 44);
+    align-items: center
+`
+
+const HoursContainer = styled.div`
+    height: 95%;
+    flex-grow: 1;
+    text-align: center;
+    color: white;
+`;
+const ContactContainer = styled.div`
+    height: 95%;
+    flex-grow: 1;
+    text-align: center;
+    color: white;
+`
+const CopyrightContainer = styled.div`
+    height: 95%;
+    display: flex;
+    flex-grow: 2;
+    align-items: flex-end;    
+    justify-content: center;
+    color: white;
+`
 
 function Footer() {
     return (
-        <Box component={Grid} container direction="row" height="20vh" justifyContent="space-between" bgcolor="text.secondary" overflow="hidden">
-            <Grid container item xs={5} spacing={1}>
-                <Grid item xs={5} component="img" src="https://i.imgur.com/3EgF3Lz.png" />
-                <Grid item xs={6}>
-                    <Typography variant="h5" component="h2" align="center" gutterBottom>Locations & Hours</Typography>
-                    <Typography variant="p" component="p" align="center">Pho28</Typography>
-                    <Typography variant="p" component="p" align="center" gutterBottom>1 Washington Sq, San Jose, CA</Typography>
-                    <Divider />
-                    <Typography variant="p" component="p" align="center">Open: 10:00AM - 10:00PM</Typography>
+        <FooterContainer>
+            <ContactContainer>
+            <Typography variant="h6" gutterBottom>
+                    Contact us
+                </Typography>
+                <Typography variant="body1">
+                    Pho 28
+                </Typography>
+                <Typography variant="body1">
+                    (408)-123-4567
+                </Typography>
+                <Typography variant="body1">
+                    1 Washington Sq, San Jose, CA 95122
+                </Typography>
+            </ContactContainer>
 
-                </Grid>
-            </Grid>
+            <CopyrightContainer>
+                <Typography variant="body1" gutterBottom>
+                   Pho28 | Copyright 2021 All rights reserved
+                </Typography>
+            </CopyrightContainer>
 
-            <Grid item xs={3} container>
-                <Box component="p" textAlign="center" alignSelf="flex-end">Copyright@2021 Pho28</Box>
-            </Grid>
-
-            <Grid item xs={4} container spacing={2} >
-                <Grid item xs={5}>
-                    <Box component={Button} variant="contained" fullWidth alignItems="flex-end" marginTop="70%">Call us</Box>
-                </Grid>
-                <Grid item xs={5}>
-                    <Box component={Button} variant="contained" fullWidth alignItems="flex-end" marginTop="70%">Message us</Box>
-                </Grid>
-            </Grid>
-        </Box>
+            <HoursContainer>
+                <Typography variant="h6" gutterBottom>
+                    HOURS
+                </Typography>
+                <Typography variant="body1">
+                    Closed: Monday & Wednesday
+                </Typography>
+                <Typography variant="body1">
+                    Thursday: 9:00AM - 7:00PM
+                </Typography>
+                <Typography variant="body1">
+                    Friday: 9:00AM - 7:00PM
+                </Typography>
+                <Typography variant="body1">
+                    Saturday: 9:00AM - 7:00PM
+                </Typography>
+                <Typography variant="body1">
+                    Sunday: 9:00AM - 7:00PM
+                </Typography>
+            </HoursContainer>
+        </FooterContainer>
     );
 }
 
