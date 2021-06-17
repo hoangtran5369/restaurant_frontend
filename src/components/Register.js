@@ -1,70 +1,55 @@
-import { Button, Card, CardContent, Divider, Grid, TextField, Typography } from "@material-ui/core";
+import { Button, Card, CardContent, Divider, Grid, Box, TextField, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
-import { Box } from "@material-ui/core";
+import {useForm} from "react-hook-form";
 
+import styled from "styled-components";
+
+
+const InputField = styled(TextField)`
+    margin: 0.5rem 0;
+`
+
+const LoginButton = styled(Button)`
+    padding: 10px;
+    flex-basis: 50%;
+`
+
+const SignupPrompt = styled.p`
+    text-align: center;
+    margin: 0.5rem 0;
+`
 function Register() {
+    const { handleSubmit, register } = useForm();
+    const onSubmit = handleSubmit((data) => {
+        console.log(data)
+    });
+
     return (
-        <div>
+        <Box minHeight="100vh" flexDirection="column" display="flex">
             <Navbar />
-            <Box display="flex" minHeight="100vh" justifyContent="space-around" alignItems="center">
+            <Box flexGrow={1} display="flex" justifyContent="space-around" alignItems="center">
                 <Box minWidth="300px" maxWidth="400px">
-                    <Card>
-                        <CardContent>
-                            <form>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}> <Typography variant="h5" component="h2" gutterBottom>Register</Typography> </Grid>
-                                    <Grid item xs={12}>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12}>
-                                                <TextField fullWidth label="Email" name="email" size="small" variant="outlined" />
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextField 
-                                                    fullWidth 
-                                                    label="Password" 
-                                                    name="password" 
-                                                    size="small" 
-                                                    type="password" 
-                                                    variant="outlined" />
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <TextField 
-                                                    fullWidth 
-                                                    label="Confirm Password" 
-                                                    name="confirm" 
-                                                    size="small" 
-                                                    type="password" 
-                                                    variant="outlined" />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item container spacing={2} xs={12} direction="row" justify="flex-end">
-                                        <Grid item xs={6}>
-                                            <Button color="primary" fullWidth type="submit" variant="contained">
-                                                Register
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                    <Divider />
-                                    <Grid item xs={12} container direction="row" justify="space-around" alignItems="center">
-                                        <Grid item xs={8} spacing={2}> 
-                                        <Box component="span" m={1}>
-                                        Already have an account?
-                                        </Box>
-                                        <Link to="/login">
-                                        Log in
-                                        </Link>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </form>
-                        </CardContent>
-                    </Card>
+                <Card>
+                    <CardContent>
+                        <form onSubmit={onSubmit}>
+                            <Typography variant="h5" component="h2" gutterBottom>Register</Typography>
+                            <InputField {...register('email')} fullWidth label="Email" name="email" size="small" variant="outlined" />
+                            <InputField {...register('password')} fullWidth label="Password" name="password" size="small" type="password" variant="outlined" />
+                            <InputField {...register('password')} fullWidth label="Confirm Password" name="confirm" size="small" type="password" variant="outlined" />
+                            <Box display="flex" flexDirection="row-reverse">
+                                <LoginButton color="primary" fullWidth type="submit" variant="contained">Register</LoginButton>
+                            </Box>
+
+                            <SignupPrompt>Already have an account? <Link to="/register">Log in</Link></SignupPrompt>
+                        </form>
+                    </CardContent>
+                </Card>
                 </Box>
             </Box>
-        </div>
+        </Box>
     );
+
 }
 
 export default Register;

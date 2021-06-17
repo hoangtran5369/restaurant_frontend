@@ -3,11 +3,13 @@ import {
     Switch,
     Route,
 } from "react-router-dom";
-import Home from "./Home";
-import Login from "./Login";
-import Register from "./Register"
-import Admin from "./Admin"
-import MenuItemCreate from "./MenuItemCreate"
+import Home from "components/Home";
+import Login from "components/Login";
+import Register from "components/Register";
+import Admin from "components/Admin";
+import Menu from "components/Menu/Menu";
+import MenuItemCreate from "components/MenuItemCreate";
+
 
 const AppRoutes = () => {
 
@@ -16,7 +18,8 @@ const AppRoutes = () => {
         { path: "/login", component: Login, exact:true },
         { path: "/register", component: Register, exact:true },
         { path: "/admin", component: Admin, exact:true },
-        { path: "/menu/create", component: MenuItemCreate, exact:true }
+        { path: "/menu", component: Menu, exact:true },
+        { path: "/menu/create", component: MenuItemCreate, exact:true },
     ]
 
 

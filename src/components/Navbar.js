@@ -1,7 +1,8 @@
 import { useHistory } from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import { Grid } from "@material-ui/core";
+import Toolbar from '@material-ui/core/Toolbar';
+import { Grid, Typography, Menu, MenuItem } from "@material-ui/core";
 import { userLoggedIn } from "../store/auth/selector";
 import { useSelector, useDispatch } from 'react-redux'
 import React from "react";
@@ -13,6 +14,76 @@ const StyledAppBar = styled(AppBar)`
     color: white;
 `
 
+const Title = styled(Typography)`
+    margin: 0.5rem;
+`
+
+const MenuGroup = styled.div`
+    flex-grow: 1;
+`
+const MenuPopup = () => {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
+        <React.Fragment>
+      <Button color="inherit" onClick={handleClick}>
+        <h3>Menu</h3>
+      </Button>
+      <Menu
+        id="resturant-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose}>Breakfast</MenuItem>
+        <MenuItem onClick={handleClose}>Lunch</MenuItem>
+        <MenuItem onClick={handleClose}>Dinner</MenuItem>
+      </Menu>
+    </React.Fragment>
+    )
+}
+
+const MorePopup = () => {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
+        <React.Fragment>
+      <Button color="inherit" onClick={handleClick}>
+        <h3>More</h3>
+      </Button>
+      <Menu
+        id="more-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose}>Option1</MenuItem>
+        <MenuItem onClick={handleClose}>Option2</MenuItem>
+        <MenuItem onClick={handleClose}>Option3</MenuItem>
+      </Menu>
+    </React.Fragment>
+    )
+}
+
+
 function Navbar() {
     const history = useHistory();
     const userIsLoggedIn = useSelector(userLoggedIn);
@@ -21,37 +92,37 @@ function Navbar() {
     if (!userIsLoggedIn) {
         userSection = (
             <React.Fragment>
-                <Grid item xs={3} component={Button} color="inherit" onClick={() => history.push('/login')}><h3>Login</h3></Grid>
-                <Grid item xs={3} component={Button} color="inherit" onClick={() => history.push('/register')}><h3>Register</h3></Grid>
+                <Button color="inherit" onClick={() => history.push('/login')}><h3>Login</h3></Button>
+                <Button color="inherit" onClick={() => history.push('/register')}><h3>Register</h3></Button>
+
             </React.Fragment>
         )
     } else {
         userSection = (
             <React.Fragment>
-                <Grid item xs={3} color="inherit" onClick={() => {}}>Hello, User!</Grid>
-                <Grid item xs={3} component={Button} color="inherit" onClick={() => { dispatch(logOut())}}><h3>Log out</h3></Grid>
+                <Button color="inherit" onClick={() => { }}><h3>Hello, User!</h3></Button>
+                <Button color="inherit" onClick={() => dispatch(logOut())}><h3>Log out</h3></Button>
             </React.Fragment>
         )
     }
 
     return (
         <StyledAppBar position="sticky" color="inherit">
-            <Grid container direction="row" justify="space-between" alignItems="center">
+            <Toolbar>
+                <Title variant="h4" onClick={() => history.push('/')}>
+                    PHO 28
+                </Title>
 
-                <Grid container item xs={4} direction="row" justify="flex-start" alignItems="center">
-                    <Grid item xs={4} onClick={() => history.push('/')}><h1>PHO28</h1></Grid>
-                    <Grid item xs={2}><h3>Menu</h3></Grid>
-                    <Grid item xs={2}><h3>Promos</h3></Grid>
-                    <Grid item xs={2}><h3>Reward</h3></Grid>
-                    <Grid item xs={2}><h3>More</h3></Grid>
-                </Grid>
+                <MenuGroup>
+                    <MenuPopup />
+                    <Button color="inherit"><h3>Promos</h3></Button>
+                    <Button color="inherit"><h3>Reward</h3></Button>
+                    <MorePopup />
+                </MenuGroup>
 
-                <Grid container item xs={3} direction="row" justify="flex-end" alignItems="center">
-                    {userSection}
+                {userSection}
 
-                    <Grid item xs={3} component={Button} color="inherit" onClick={() => { dispatch(logOut())}}><h3>Cart</h3></Grid>
-                </Grid>
-            </Grid>
+            </Toolbar>
         </StyledAppBar>
     );
 }
