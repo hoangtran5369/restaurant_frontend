@@ -20,37 +20,7 @@ const Title = styled(Typography)`
 
 const MenuGroup = styled.div`
     flex-grow: 1;
-`
-const MenuPopup = () => {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    return (
-        <React.Fragment>
-      <Button color="inherit" onClick={handleClick}>
-        <h3>Menu</h3>
-      </Button>
-      <Menu
-        id="resturant-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleClose}>Breakfast</MenuItem>
-        <MenuItem onClick={handleClose}>Lunch</MenuItem>
-        <MenuItem onClick={handleClose}>Dinner</MenuItem>
-      </Menu>
-    </React.Fragment>
-    )
-}
+` 
 
 const MorePopup = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -113,9 +83,10 @@ function Navbar() {
                     PHO 28
                 </Title>
 
-                <MenuGroup>
-                    <MenuPopup />
+                <MenuGroup>                    
+                    <Button color="inherit" onClick={() => history.push('/menu')}><h3>Menu</h3></Button>
                     <Button color="inherit"><h3>Promos</h3></Button>
+                    <Button color="inherit"  onClick={() => history.push('/reservation')}><h3>Reservation</h3></Button>
                     <Button color="inherit"><h3>Reward</h3></Button>
                     <MorePopup />
                 </MenuGroup>

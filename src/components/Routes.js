@@ -9,6 +9,8 @@ import Register from "components/Register";
 import Admin from "components/Admin";
 import Menu from "components/Menu/Menu";
 import MenuItemCreate from "components/MenuItemCreate";
+import Reservation from "components/Reservation/Reservation";
+
 
 
 const AppRoutes = () => {
@@ -20,6 +22,8 @@ const AppRoutes = () => {
         { path: "/admin", component: Admin, exact:true },
         { path: "/menu", component: Menu, exact:true },
         { path: "/menu/create", component: MenuItemCreate, exact:true },
+        {path: "/reservation", component: Reservation, exact:true },
+
     ]
 
 
