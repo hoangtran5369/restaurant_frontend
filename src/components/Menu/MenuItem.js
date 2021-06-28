@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {useState} from 'react';
 import { useDispatch } from 'react-redux';
 import { addOrder } from 'store/Order/reducer';
+import {displayItem} from 'store/FoodMenu/reducer';
 
 const MenuItemContainer = styled(ListItem)`
     height: 200px;
@@ -41,7 +42,7 @@ function MenuItem(props) {
 
     return (
 
-        <MenuItemContainer>
+        <MenuItemContainer onClick={() => dispatch(displayItem(item))}>
             <Box flexGrow={1} display="flex" flexDirection="column" justifyContent="space-between" padding="1rem">
                 <Box>
                     <Box display="flex" justifyContent="space-between">

@@ -7,3 +7,13 @@ export const getFoodMenuItems = createSelector(
     foodMenuSelector, 
     (foodMenu) => foodMenu.items
 );
+
+export const itemIsDisplayed = createSelector(
+    foodMenuSelector,
+    (foodMenu) => (foodMenu.displayingItem != null)
+)
+
+export const getDisplayedItem = createSelector(
+    foodMenuSelector,
+    (foodMenu) => foodMenu.displayingItem
+)

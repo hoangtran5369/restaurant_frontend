@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 export const foodMenuReducer = createSlice({
   name: 'foodmenu',
   initialState: {
+    displayingItem: null,
+
     items: [
       {
         id: "1",
@@ -54,10 +56,18 @@ export const foodMenuReducer = createSlice({
       // immutable state based off those changes
       state.items = action.payload;
     },
+
+    displayItem: (state, action) => {
+      state.displayingItem = action.payload;
+    },
+
+    hideItem: (state) => {
+      state.displayingItem = null;
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { loadItems } = foodMenuReducer.actions
+export const { loadItems, displayItem, hideItem } = foodMenuReducer.actions
 
 export default foodMenuReducer.reducer

@@ -1,10 +1,21 @@
 import Navbar from 'components/Navbar';
-import { Box, Typography, List, GridList, GridListTile, Input, Select, MenuItem, InputLabel, FormControl, Button, ListItem, ListItemText, ListItemSecondaryAction, ListItemAvatar } from '@material-ui/core';
+import {
+    Box,
+    List,
+    GridList,
+    GridListTile,
+    Input,
+    FormControl,
+    Modal
+} from '@material-ui/core';
 import styled from "styled-components";
 import FoodMenuItem from 'components/Menu/MenuItem';
-import { useSelector } from 'react-redux';
-import { getFoodMenuItems } from 'store/FoodMenu/selector';
+import FoodItemModal from 'components/Menu/FoodItemModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFoodMenuItems, itemIsDisplayed, getDisplayedItem } from 'store/FoodMenu/selector';
+import { hideItem } from 'store/FoodMenu/reducer';
 import Cart from 'components/Menu/Cart';
+import React from 'react';
 
 const CategoryList = styled(GridList)`
     height: 75vh;
@@ -33,9 +44,6 @@ const CartContainer = styled.div`
 
 `
 
-const DeliverySelector = styled(FormControl)`
-    width: 100%;
-`
 
 
 
@@ -44,52 +52,60 @@ function Menu() {
     const foodMenuItems = useSelector(getFoodMenuItems)
 
     return (
-        <Box minHeight="100vh" flexDirection="column" display="flex">
-            <Navbar />
-            <Box display="flex" flexDirection="row" marginX="10vw" flexGrow={1} marginY="5vh" alignItems="center" padding="1rem">
+        <React.Fragment>
+            <FoodItemModal />
+               
+            <Box minHeight="100vh" flexDirection="column" display="flex">
 
-                <Box flexBasis="400px">
-                    <CategoryList cellHeight={180}>
-                        <GridListTile>
-                            <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                        </GridListTile>
-                        <GridListTile>
-                            <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                        </GridListTile>
-                        <GridListTile>
-                            <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                        </GridListTile>
-                        <GridListTile>
-                            <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                        </GridListTile>
-                        <GridListTile>
-                            <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                        </GridListTile>
-                        <GridListTile>
-                            <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                        </GridListTile>
-                        <GridListTile>
-                            <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                        </GridListTile>
+                <Navbar />
+                <Box display="flex" flexDirection="row" marginX="10vw" flexGrow={1} marginY="5vh" alignItems="center" padding="1rem">
 
-                    </CategoryList>
+                    <Box flexBasis="400px">
+                        <CategoryList cellHeight={180}>
+                            <GridListTile>
+                                <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
+                            </GridListTile>
+                            <GridListTile>
+                                <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
+                            </GridListTile>
+                            <GridListTile>
+                                <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
+                            </GridListTile>
+                            <GridListTile>
+                                <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
+                            </GridListTile>
+                            <GridListTile>
+                                <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
+                            </GridListTile>
+                            <GridListTile>
+                                <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
+                            </GridListTile>
+                            <GridListTile>
+                                <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
+                            </GridListTile>
+
+                        </CategoryList>
+                    </Box>
+
+                    <Box flexGrow={1} marginX="10px" height="75vh" display="flex" flexDirection="column">
+                        <SearchBar label="Search" variant="filled" fullWidth disableUnderline />
+                        <MenuListContainer>
+                            <List>
+                                {foodMenuItems.map(item => <FoodMenuItem item={item} />)}
+                            </List>
+
+                        </MenuListContainer>
+                    </Box>
+
+                    <CartContainer>
+                        <Cart />
+                    </CartContainer>
                 </Box>
 
-                <Box flexGrow={1} marginX="10px" height="75vh" display="flex" flexDirection="column">
-                    <SearchBar label="Search" variant="filled" fullWidth disableUnderline />
-                    <MenuListContainer>
-                        <List>
-                            {foodMenuItems.map(item => <FoodMenuItem item={item} />)}
-                        </List>
 
-                    </MenuListContainer>
-                </Box>
-
-                <CartContainer>
-                    <Cart />
-                </CartContainer>
             </Box>
-        </Box>
+        </React.Fragment>
+
     );
 }
 
