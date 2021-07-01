@@ -40,11 +40,20 @@ function MenuItem(props) {
         dispatch(addOrder({item, quantity}))
     }
 
+    const myProps = {
+        flexGrow: 1,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent:"space-between",
+        padding:"1rem",
+    }
+
     return (
 
         <MenuItemContainer onClick={() => dispatch(displayItem(item))}>
-            <Box flexGrow={1}                
-                 display="flex" flexDirection="column" justifyContent="space-between" padding="1rem">
+            <Box 
+            {...myProps}
+            >
                 <Box>
                     <Box display="flex" justifyContent="space-between">
                         <Typography variant="h5">{item.name}</Typography>                        

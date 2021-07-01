@@ -3,10 +3,7 @@ import {
   Box,
   List,
   GridList,
-  GridListTile,
   Input,
-  FormControl,
-  Modal,
   Tab,
   Tabs,
 } from "@material-ui/core";
@@ -16,8 +13,6 @@ import FoodItemModal from "components/Menu/FoodItemModal";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getFoodMenuItems,
-  itemIsDisplayed,
-  getDisplayedItem,
 } from "store/FoodMenu/selector";
 import { hideItem } from "store/FoodMenu/reducer";
 import Cart from "components/Menu/Cart";

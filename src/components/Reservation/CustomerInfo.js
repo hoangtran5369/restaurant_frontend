@@ -1,18 +1,7 @@
 import {
   Box,
   Button,
-  Grid,
-  Typography,
-  Card,
-  CardHeader,
-  StepLabel,
-  Step,
-  Stepper,
-  MenuItem,
-  InputLabel,
-  Select,
-  FormControl,
-  Container,
+
   TextField,
   FormControlLabel,
   Checkbox,
@@ -21,27 +10,7 @@ import styled from "styled-components";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 
-const MenuItemBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-`;
 
-const SelectRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-grow: 4;
-  justify-content: space-around;
-  align-items: stretch;
-  margin-top: 15px;
-`;
-
-const ButtonRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin-top: 15px;
-`;
 const MyContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -56,12 +25,19 @@ const OrderContainer = styled.div`
   width: 50%;
   align-items: stretch;
 `;
-const CheckBoxLable = styled(FormControlLabel)`
-  font-size: 5px;
+const CheckBoxLabel = styled(props => <FormControlLabel {...props} classes={{label: 'checkbox-label'}}/>)`
+  margin-top: 20px;
+
+  & > .checkbox-label {
+    font-size: 0.8rem;
+  }
 `;
 
+const SubmitButton = styled(Button)`
+  margin-top: 20px;
+`
+
 function CustomerInfo({ onFinished }) {
-  const steps = ["Find a table", "Your detail"];
 
   return (
     <Box>
@@ -71,33 +47,35 @@ function CustomerInfo({ onFinished }) {
             <TextField
               id="outlined-basic"
               label="First name"
-              variant="outlined"
+
             />
             <TextField
               id="outlined-basic"
-              label="Last name"
-              variant="outlined"
+              label="Surname"
+
             />
             <TextField
               id="outlined-basic"
               label="Phone number"
-              variant="outlined"
+
             />
-            <TextField id="outlined-basic" label="Email" variant="outlined" />
+            <TextField id="outlined-basic" label="Email" />
             <TextField
               id="outlined-basic"
               label="Add a special request"
-              variant="outlined"
+
             />
-            <h6>
-              <Checkbox name="checkedA" />
-              Yes, I want to get text updates and reminders about my bookings.*
-            </h6>
-            <h6>
-              <Checkbox name="checkedA" />
-              This restaurant will send you dining offers and news by email
-              unless you object by unchecking this box.
-            </h6>
+
+            <CheckBoxLabel
+              control={<Checkbox checked  name="checkedA" />}
+              label="Yes, I want to get text updates and reminders about my bookings.*"
+            />
+            <CheckBoxLabel
+              control={<Checkbox checked  name="checkedA" />}
+              label="This restaurant will send you dining offers and news by email
+              unless you object by unchecking this box."
+            />
+          
           </form>
         </FormContainer>
 
@@ -108,9 +86,9 @@ function CustomerInfo({ onFinished }) {
           <h6> 2 people </h6>
         </OrderContainer>
       </MyContainer>
-      <Button color="secondary" fullWidth variant="contained">
+      <SubmitButton color="primary" fullWidth variant="contained">
         Confirm booking
-      </Button>
+      </SubmitButton>
     </Box>
   );
 }

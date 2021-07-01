@@ -1,17 +1,14 @@
 import {
   Box,
-  Button,
-  Grid,
-  Typography,
   Card,
-  CardHeader,
-  StepLabel,
-  Step,
-  Stepper,
+  CardContent,
   MenuItem,
   InputLabel,
   Select,
   FormControl,
+  Tabs,
+  Tab,
+  Typography,
 } from "@material-ui/core";
 import styled from "styled-components";
 import Navbar from "../Navbar";
@@ -21,31 +18,32 @@ import CustomerInfo from "./CustomerInfo";
 import { useState } from "react";
 import { set } from "react-hook-form";
 
-const MenuItemBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-`;
 
-const SelectRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-grow: 4;
-  justify-content: space-around;
-  align-items: stretch;
-  margin-top: 15px;
-`;
+const StyledCard = styled(Card)`
+box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+transition: height 1.5s;
 
-const ButtonRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin-top: 15px;
-`;
+`
+
+const StyledTabs = styled(props => {
+  return <Tabs {...props} classes={{indicator: 'indicator'}}></Tabs>
+})`
+  background-color: rgb(245, 245, 245);
+  box-shadow: 0.3em 0.3em 0.5em rgba(0,0,0,0.2);
+  padding-right: 30%;
+  && .indicator {
+    background-color: #1F6FF7;
+  }
+`
+
+const StyledTab = styled(Tab)`
+  font-weight: bold;
+`
 
 function Reservation() {
-  const steps = ["Find a table", "Your detail"];
-  
+  const steps = ["1. Find a table", "2. Your details"];
+
+
 
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -56,39 +54,37 @@ function Reservation() {
         flexGrow={1}
         display="flex"
         justifyContent="space-around"
-        alignItems="center"
         color="text.primary"
+        paddingTop="10vh"
       >
-        <Box minWidth="300px" maxWidth="400px">
-          <Card>
+        <Box minWidth="600px" maxWidth="35vw">
+          <Box marginBottom="20px">
+            <Typography variant="h4">Booking at Pho28</Typography>
+          </Box>
+          <StyledCard >
             
-            <Stepper activeStep={ currentStep }>
-              {steps.map((label, index) => {
-                const stepProps = {};
-                const labelProps = {};
+            <StyledTabs
+              value={currentStep}
+              onChange={(e, newStep) => {setCurrentStep(newStep)}}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
+              aria-label="full width tabs example"
+            >
+              {steps.map(step => <StyledTab label={step} />)}
+            </StyledTabs>
+            <CardContent>
 
-                return (
-                  <Step
-                    key={label}
-                    {...stepProps}
-                    onClick={() => setCurrentStep(index)}
-                  >
-                    <StepLabel {...labelProps}>{label}</StepLabel>
-                  </Step>
-                );
-              })}
-            </Stepper>
-
-            {currentStep === 0 ? (
-              <FindATable onFinished={() => setCurrentStep(1)} />
-            ) : (
-              <CustomerInfo />
-            )}
-          </Card>
+              {currentStep === 0 ? (
+                <FindATable onFinished={() => setCurrentStep(1)} />
+              ) : (
+                <CustomerInfo />
+              )}
+            </CardContent>
+          </StyledCard>
         </Box>
       </Box>
 
-      <Footer />
     </Box>
   );
 }

@@ -43,10 +43,9 @@ const LeftContainer = styled.div`
 `;
 
 const RightContainer = styled.div`
-  
-  width: 30%;
-  background-color: yellow;
-`;
+    min-width: 400px;
+    background-color: yellow;
+`
 
 const ImageContainer = styled.div`
   width: 100%;
@@ -103,88 +102,36 @@ function FoodItemModal() {
                     <ImageContainer>
                     </ImageContainer>
                     </Box> */}
-          <Grid
-            container
-            direction="row"
-            justify="flex-start"
-            alignItems="stretch"             
-          >
-            <Grid item xs={2}>
-              <GalleryList cellHeight={100} cols={1}>
-                <GridListTile>
-                  <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                </GridListTile>
-                <GridListTile>
-                  <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                </GridListTile>
-                {/* <GridListTile>
-                                    <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                                </GridListTile>
+                    <Grid
+                        container
+                        direction="row"
+                        justify="flex-start"
+                        alignItems="stretch"
+                    >
+                        <Grid item xs={2}>
+                            <GalleryList cellHeight={100} cols={1}>
                                 <GridListTile>
                                     <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
                                 </GridListTile>
                                 <GridListTile>
                                     <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
                                 </GridListTile>
-                                <GridListTile>
-                                    <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                                </GridListTile>
-                                <GridListTile>
-                                    <img src="https://i.imgur.com/yGeOUMB.jpg" alt="" />
-                                </GridListTile> */}
-              </GalleryList>
-            </Grid>
-            <Grid item xs={9}>
-              <ImageContainer></ImageContainer>
-            </Grid>
-          </Grid>
-          
-        </LeftContainer>
-        <RightContainer>
-          <h2> Pho bo </h2>
-          <h2> Price: </h2>
-          <h2> Description: </h2>
-          <h2> Option: </h2>
-
-          {options.map((option) => (
-            <div>
-              <FormControlLabel
-                control={<Checkbox name="checkedB" color="primary" />}
-                label={option}
-              />{" "}
-            </div>
-          ))}
-
-          <TextField
-            label="Special instruction:"
-            id="outlined-margin-none"
-            defaultValue="Default Value"
-            helperText="150 characters maximum."
-            variant="outlined"
-          />
-          <Box display="flex" alignContent="stretch">
-            <QuantityPicker
-              label="Count"
-              value={quantity}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              type="number"
-              defaultValue={1}
-              variant="outlined"
-              size="small"
-              onChange={(event) => updateQuantity(event.target.value)}
-            />
-            <OrderButton variant="contained" onClick={handleOrder} color="primary"  >
-              Add to card
-            </OrderButton>
-          </Box>
-         
-           
-        </RightContainer>
-      </MainContainer>
-    </MyModal>
-  );
+                              
+                            </GalleryList>
+                        </Grid>
+                        <Grid item xs={9}>
+                            <ImageContainer>
+                            </ImageContainer>
+                        </Grid>
+                    </Grid>
+                    <h1>Pho bo</h1>
+                </LeftContainer>
+                <RightContainer>
+                    <h1> hello</h1>
+                </RightContainer>
+            </MainContainer>
+        </MyModal>
+    );
 }
 
 export default FoodItemModal;
