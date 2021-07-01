@@ -45,30 +45,7 @@ const ButtonRow = styled.div`
 
 function Reservation() {
   const steps = ["Find a table", "Your detail"];
-  const partySizes = [
-    { lable: "1 person", value: 1 },
-    { lable: "2 people", value: 2 },
-    { lable: "3 people", value: 3 },
-    { lable: "4 people", value: 4 },
-    { lable: "5 people", value: 5 },
-    { lable: "6 people", value: 6 },
-  ];
-  const dates = [
-    { lable: "Jun 21", value: 0 },
-    { lable: "Jun 22", value: 1 },
-    { lable: "Jun 23", value: 2 },
-    { lable: "Jun 24", value: 3 },
-    { lable: "Jun 25", value: 4 },
-    { lable: "Jun 26", value: 5 },
-  ];
-  const hours = [
-    { lable: "8:00 AM", value: 0 },
-    { lable: "10:00 AM", value: 1 },
-    { lable: "12:00 PM", value: 2 },
-    { lable: "2:00 PM", value: 3 },
-    { lable: "4:00 PM", value: 4 },
-    { lable: "6:00 PM", value: 5 },
-  ];
+  
 
   const [currentStep, setCurrentStep] = useState(0);
 
