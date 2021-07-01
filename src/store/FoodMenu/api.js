@@ -1,10 +1,13 @@
 import axios from 'axios';
 
 export const fetchCategories = async () => {
-    const resp = await axios.get("http://127.0.0.1:5000/v0/category");
-    const categories = resp.data;
-    console.log(categories);
-    return categories;
+    const resp = await axios.get("http://192.168.1.32:8080/v0/category");
+    return resp.data;
 }
 
-export default { fetchCategories };
+export const fetchFoodMenuItems = async () => {
+    const resp = await axios.get("http://192.168.1.32:8080/v0/menu-item");
+    return resp.data;
+}
+
+export default { fetchCategories, fetchFoodMenuItems };

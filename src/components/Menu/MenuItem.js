@@ -65,7 +65,7 @@ function MenuItem(props) {
             </Box>
             
             <Box>
-                <MenuItemImage src={item.image} alt="" />
+                <MenuItemImage src={item.imageUrl} alt="" />
             </Box>
         </MenuItemContainer>
 

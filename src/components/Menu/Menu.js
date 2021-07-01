@@ -17,7 +17,7 @@ import {
 } from "store/FoodMenu/selector";
 import Cart from "components/Menu/Cart";
 import React, { useEffect } from "react";
-import {fetchCategories} from "store/FoodMenu/reducer";
+import {fetchCategories, fetchFoodMenuItems} from "store/FoodMenu/reducer";
 
 const CategoryList = styled(GridList)`
   height: 75vh;
@@ -50,9 +50,12 @@ function Menu() {
     const foodMenuItems = useSelector(getFoodMenuItems);
     const categories = useSelector(getCategories);
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(fetchCategories());
+        dispatch(fetchFoodMenuItems());
     }, [])
+
 
 
     return (
