@@ -21,7 +21,6 @@ import { set } from "react-hook-form";
 
 const StyledCard = styled(Card)`
 box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-transition: height 1.5s;
 
 `
 
@@ -55,11 +54,11 @@ function Reservation() {
         display="flex"
         justifyContent="space-around"
         color="text.primary"
-        paddingTop="10vh"
+        paddingTop="5vh"
       >
-        <Box minWidth="600px" maxWidth="35vw">
+        <Box minWidth="630px" maxWidth="35vw">
           <Box marginBottom="20px">
-            <Typography variant="h4">Booking at Pho28</Typography>
+            <Typography variant="h3">Booking at Pho28</Typography>
           </Box>
           <StyledCard >
             
