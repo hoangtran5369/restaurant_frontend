@@ -85,7 +85,7 @@ function Navbar() {
 
                 <MenuGroup>                    
                     <Button color="inherit" onClick={() => history.push('/menu')}><h3>Menu</h3></Button>
-                    <Button color="inherit"><h3>Promos</h3></Button>
+                    <Button color="inherit"onClick={() => history.push('/Promotions')}><h3>Promos</h3></Button>
                     <Button color="inherit"  onClick={() => history.push('/reservation')}><h3>Reservation</h3></Button>
                     <Button color="inherit"><h3>Reward</h3></Button>
                     <MorePopup />

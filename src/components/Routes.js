@@ -7,6 +7,7 @@ import Home from "components/Home";
 import Login from "components/Login";
 import Register from "components/Register";
 import Admin from "components/Admin";
+import Promotions from "components/Promotions";
 import Menu from "components/Menu/Menu";
 import MenuItemCreate from "components/MenuItemCreate";
 import Reservation from "components/Reservation/Reservation";
@@ -23,6 +24,7 @@ const AppRoutes = () => {
         { path: "/menu", component: Menu, exact:true },
         { path: "/menu/create", component: MenuItemCreate, exact:true },
         {path: "/reservation", component: Reservation, exact:true },
+        {path: "/Promotions", component: Promotions, exact:true },
 
     ]
 

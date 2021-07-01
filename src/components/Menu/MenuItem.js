@@ -8,10 +8,10 @@ import {displayItem} from 'store/FoodMenu/reducer';
 const MenuItemContainer = styled(ListItem)`
     height: 200px;
     display: flex;
-    align-items: stretch;
+    align-items: stretch !important;
     border: 1px solid grey;
     border-radius: 0.5rem;
-    box-shadow: inset 0 0 5px grey;
+    box-shadow: inset 0 0 5px grey;  
 `
 
 const MenuItemImage = styled.img`
@@ -43,31 +43,18 @@ function MenuItem(props) {
     return (
 
         <MenuItemContainer onClick={() => dispatch(displayItem(item))}>
-            <Box flexGrow={1} display="flex" flexDirection="column" justifyContent="space-between" padding="1rem">
+            <Box flexGrow={1}                
+                 display="flex" flexDirection="column" justifyContent="space-between" padding="1rem">
                 <Box>
                     <Box display="flex" justifyContent="space-between">
-                        <Typography variant="h5">{item.name}</Typography>
-                        <Typography variant="h6">${item.price}</Typography>
+                        <Typography variant="h5">{item.name}</Typography>                        
                     </Box>
                     <Typography variant="body2">{item.description}</Typography>
                 </Box>
-
-                <Box display="flex" alignContent="stretch">
-                    <QuantityPicker
-                        label="Count"
-                        value={quantity}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        type="number"
-                        variant="outlined"
-                        size="small"
-                        onChange={event => updateQuantity(event.target.value)}
-                    />
-
-                    <OrderButton variant="contained" onClick={handleOrder}>Order</OrderButton>
-                </Box>
+                <Typography variant="h6">${item.price}</Typography>
+                
             </Box>
+            
             <Box>
                 <MenuItemImage src={item.image} alt="" />
             </Box>
