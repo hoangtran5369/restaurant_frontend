@@ -1,9 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import foodMenuApi from 'store/FoodMenu/api';
+
+
+export const fetchCategories = createAsyncThunk(
+  'foodmenu/fetchCategories',
+  async () => {
+    const categories = await foodMenuApi.fetchCategories();
+    return categories;
+  }
+)
 
 export const foodMenuReducer = createSlice({
   name: 'foodmenu',
   initialState: {
     displayingItem: null,
+    categories: [],
 
     items: [
       {
@@ -65,6 +76,12 @@ export const foodMenuReducer = createSlice({
       state.displayingItem = null;
     }
   },
+
+  extraReducers: (builder) => {
+    builder.addCase(fetchCategories.fulfilled, (state, action) => {
+      state.categories = action.payload;
+    })
+  }
 })
 
 // Action creators are generated for each case reducer function
