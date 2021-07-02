@@ -56,7 +56,7 @@ function MenuItem(props) {
             >
                 <Box>
                     <Box display="flex" justifyContent="space-between">
-                        <Typography variant="h5">{item.name}</Typography>                        
+                        <Typography variant="h5">{item.name}</Typography>                     
                     </Box>
                     <Typography variant="body2">{item.description}</Typography>
                 </Box>

@@ -10,19 +10,16 @@ import {
 import styled from "styled-components";
 import FoodMenuItem from "components/Menu/MenuItem";
 import FoodItemModal from "components/Menu/FoodItemModal";
+import CategoryPicker from "components/Menu/CategoryPicker";
 import { useDispatch, useSelector } from "react-redux";
 import {
     getFoodMenuItems,
-    getCategories
+    getFilteredItems
 } from "store/FoodMenu/selector";
 import Cart from "components/Menu/Cart";
 import React, { useEffect } from "react";
 import {fetchCategories, fetchFoodMenuItems} from "store/FoodMenu/reducer";
 
-const CategoryList = styled(GridList)`
-  height: 75vh;
-  padding: 1rem;
-`;
 
 const MenuListContainer = styled.div`
   flex-grow: 1;
@@ -47,8 +44,7 @@ const CartContainer = styled.div`
 `;
 
 function Menu() {
-    const foodMenuItems = useSelector(getFoodMenuItems);
-    const categories = useSelector(getCategories);
+    const foodMenuItems = useSelector(getFilteredItems);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -56,8 +52,7 @@ function Menu() {
         dispatch(fetchFoodMenuItems());
     }, [])
 
-
-
+ 
     return (
         <React.Fragment>
             <FoodItemModal />
@@ -73,18 +68,7 @@ function Menu() {
                     alignItems="stretch"
                     padding="1rem"
                 >
-                    <Box flexBasis="200px" bgcolor="">
-                        <Tabs
-                            orientation="vertical"
-                            variant="scrollable"
-                            value={1}
-                            onChange={() => { }}
-                            aria-label="Vertical tabs example"
-                        >
-                            <Tab label="Full menu" />
-                            {categories.map(category => <Tab label={category}/>)}
-                        </Tabs>
-                    </Box>
+                   <CategoryPicker />
 
                     <Box
                         flexGrow={1}

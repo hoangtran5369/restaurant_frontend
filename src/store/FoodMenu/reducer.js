@@ -22,6 +22,7 @@ export const foodMenuReducer = createSlice({
   name: 'foodmenu',
   initialState: {
     displayingItem: null,
+    categoryIndex: -1,
     categories: [],
 
     items: []
@@ -41,7 +42,19 @@ export const foodMenuReducer = createSlice({
 
     hideItem: (state) => {
       state.displayingItem = null;
+    },
+
+    setCategoryIndex: (state, action) => {
+      const newIndex = action.payload
+      if(Number.isInteger(newIndex) && newIndex < state.categories.length){
+        state.categoryIndex = action.payload;
+      }
+    },
+
+    clearCategoryIndex: (state) => {
+      state.categoryIndex = -1;
     }
+
   },
 
   extraReducers: (builder) => {
@@ -56,6 +69,6 @@ export const foodMenuReducer = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { loadItems, displayItem, hideItem } = foodMenuReducer.actions
+export const { loadItems, displayItem, hideItem, setCategoryIndex, clearCategoryIndex } = foodMenuReducer.actions
 
 export default foodMenuReducer.reducer
