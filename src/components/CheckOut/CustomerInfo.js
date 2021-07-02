@@ -8,9 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import styled from "styled-components";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
-
+ 
 
 const MyContainer = styled.div`
   display: flex;
@@ -73,22 +71,7 @@ function CustomerInfo({ onFinished }) {
             />
             <InfoTextField
               fullWidth id="outlined-basic" label="Email" />
-            <InfoTextField
-              fullWidth
-              id="outlined-basic"
-              label="Add a special request"
-
-            />
-
-            <CheckBoxLabel
-              control={<Checkbox checked  name="checkedA" />}
-              label="Yes, I want to get text updates and reminders about my bookings.*"
-            />
-            <CheckBoxLabel
-              control={<Checkbox checked  name="checkedA" />}
-              label="This restaurant will send you dining offers and news by email
-              unless you object by unchecking this box."
-            />
+           
           
           </form>
         </FormContainer>
@@ -106,9 +89,7 @@ function CustomerInfo({ onFinished }) {
       </MyContainer>
       
       <Divider variant="middle" />
-      <SubmitButton color="primary" fullWidth variant="contained">
-        Confirm booking
-      </SubmitButton>
+      <SubmitButton  onClick={onFinished} color="primary" fullWidth variant="contained"> Next   </SubmitButton>
     </Box>
   );
 }
