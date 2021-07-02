@@ -140,10 +140,11 @@ import {
             </Grid>
             
           </LeftContainer>
-          <RightContainer>
-            <h2> Pho bo </h2>
-            <h2> Price: </h2>
-            <h2> Description: </h2>
+          <RightContainer>        
+
+            <h2> {item && item.name}</h2>
+            <h2> ${item && item.price} </h2>
+            <h2>  {item && item.description} </h2>
             <h2> Option: </h2>
   
             {options.map((option) => (
