@@ -1,12 +1,15 @@
 import axios from 'axios';
+import api, {FoodMenuUrl} from 'store/api';
+
+const base_url = process.env.REACT_APP_API_URL
 
 export const fetchCategories = async () => {
-    const resp = await axios.get("http://192.168.0.119:8080/v0/category");
+    const resp = await api.get(FoodMenuUrl.getCategories);
     return resp.data;
 }
 
 export const fetchFoodMenuItems = async () => {
-    const resp = await axios.get("http://192.168.0.119:8080/v0/menu-item");
+    const resp = await api.get(FoodMenuUrl.getMenuItems);
     return resp.data;
 }
 
