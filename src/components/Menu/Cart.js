@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { getFoodMenuItems } from "store/FoodMenu/selector";
 import Order from "components/Menu/Order";
 import { getSubtotal } from "store/Order/selector";
+import { useHistory } from "react-router-dom";
 
 const CartContainer = styled.div`
   border: 2px solid grey;
@@ -37,6 +38,7 @@ const DeliverySelector = styled(FormControl)`
 
 function Menu() {
   const subtotal = useSelector(getSubtotal);
+  const history = useHistory()
 
   return (
     <Box
@@ -68,7 +70,7 @@ function Menu() {
         </Box>
       </div>
 
-      <Button variant="contained" fullWidth>
+      <Button variant="contained" fullWidth onClick={() => {history.push('/checkout')}}>
         Checkout
       </Button>
     </Box>
