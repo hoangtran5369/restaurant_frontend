@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import styled from "styled-components";
+import OrderInfo from "components/CheckOut/OrderInfo";
  
 
 const MyContainer = styled.div`
@@ -76,16 +77,9 @@ function CustomerInfo({ onFinished }) {
           </form>
         </FormContainer>
 
-        <OrderContainer>
-          <Typography variant="h6" gutterBottom>Your reservation at Pho28</Typography>
-          <Divider />
-          <Box padding={2}>
-
-          <Typography variant="body1" gutterBottom>Tuesday, 30 Jun</Typography>
-          <Typography variant="body1" gutterBottom> 9:00 AM</Typography>
-          <Typography variant="body1" gutterBottom>2 people</Typography>
-          </Box>
-        </OrderContainer>
+      <OrderInfo>
+        
+      </OrderInfo>
       </MyContainer>
       
       <Divider variant="middle" />
