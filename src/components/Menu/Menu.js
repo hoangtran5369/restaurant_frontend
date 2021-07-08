@@ -1,25 +1,14 @@
 import Navbar from "components/Navbar";
-import {
-    Box,
-    List,
-    GridList,
-    Input,
-    Tab,
-    Tabs,
-} from "@material-ui/core";
+import { Box, List, GridList, Input, Tab, Tabs } from "@material-ui/core";
 import styled from "styled-components";
 import FoodMenuItem from "components/Menu/MenuItem";
 import FoodItemModal from "components/Menu/FoodItemModal";
 import CategoryPicker from "components/Menu/CategoryPicker";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    getFoodMenuItems,
-    getFilteredItems
-} from "store/FoodMenu/selector";
+import { getFoodMenuItems, getFilteredItems } from "store/FoodMenu/selector";
 import Cart from "components/Menu/Cart";
 import React, { useEffect } from "react";
-import {fetchCategories, fetchFoodMenuItems} from "store/FoodMenu/reducer";
-
+import { fetchCategories, fetchFoodMenuItems } from "store/FoodMenu/reducer";
 
 const MenuListContainer = styled.div`
   flex-grow: 1;
@@ -44,61 +33,60 @@ const CartContainer = styled.div`
 `;
 
 function Menu() {
-    const foodMenuItems = useSelector(getFilteredItems);
-    const dispatch = useDispatch();
+  const foodMenuItems = useSelector(getFilteredItems);
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(fetchCategories());
-        dispatch(fetchFoodMenuItems());
-    }, [])
+  useEffect(() => {
+    dispatch(fetchCategories());
+    dispatch(fetchFoodMenuItems());
+  }, []);
 
- 
-    return (
-        <React.Fragment>
-            <FoodItemModal />
+  return (
+    <React.Fragment>
+      <FoodItemModal />
 
-            <Box minHeight="100vh" flexDirection="column" display="flex">
-                <Navbar />
-                <Box
-                    display="flex"
-                    flexDirection="row"
-                    marginX="10vw"
-                    flexGrow={1}
-                    marginY="5vh"
-                    alignItems="stretch"
-                    padding="1rem"
-                >
-                   <CategoryPicker />
+      <Box minHeight="100vh" flexDirection="column" display="flex">
+        <Navbar />
+        <Box
+          display="flex"
+          flexDirection="row"
+          marginX="10vw"
+          flexGrow={1}
+          marginY="5vh"
+          alignItems="stretch"
+          padding="1rem"
+        >
+          <CategoryPicker />
 
-                    <Box
-                        flexGrow={1}
-                        marginX="10px"
-                        height="75vh"
-                        display="flex"
-                        flexDirection="column"
-                    >
-                        <SearchBar
-                            label="Search"
-                            variant="filled"
-                            fullWidth
-                            disableUnderline
-                        />
-                        <MenuListContainer>
-                            <List>
-                                {foodMenuItems.map((item) => (
-                                    <FoodMenuItem item={item} />
-                                ))}
-                            </List>
-                        </MenuListContainer>
-                    </Box>
+          <Box
+            flexGrow={1}
+            marginX="10px"
+            height="75vh"
+            display="flex"
+            flexDirection="column"
+          >
+            <SearchBar
+              label="Search"
+              variant="filled"
+              fullWidth
+              disableUnderline
+            />
+            <MenuListContainer>
+              <List>
+                {foodMenuItems.map((item) => (
+                  <FoodMenuItem item={item} />
+                ))}
+              </List>
+            </MenuListContainer>
+          </Box>
 
-                    <CartContainer>
-                        <Cart />
-                    </CartContainer>
-                </Box>
-            </Box>
-        </React.Fragment>
-    );
+          <CartContainer>
+            <Cart />
+          </CartContainer>
+        </Box>
+      </Box>
+    </React.Fragment>
+  );
 }
 
 export default Menu;
