@@ -92,7 +92,7 @@ import {
 
                 <Divider></Divider>
                 <ListItem>
-                        <ListItemText primary="Order Total"></ListItemText>
+                        <h1><ListItemText primary="Order Total"></ListItemText></h1>
                         <ListItemSecondaryAction> US$7.50</ListItemSecondaryAction>
                 </ListItem>
             </List>
