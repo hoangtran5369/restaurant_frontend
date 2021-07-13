@@ -38,7 +38,7 @@ const DeliverySelector = styled(FormControl)`
 
 function Menu() {
   const subtotal = useSelector(getSubtotal);
-  const history = useHistory()
+  const history = useHistory();
 
   return (
     <Box
@@ -70,7 +70,13 @@ function Menu() {
         </Box>
       </div>
 
-      <Button variant="contained" fullWidth onClick={() => {history.push('/checkout')}}>
+      <Button
+        variant="contained"
+        fullWidth
+        onClick={() => {
+          history.push("/checkout");
+        }}
+      >
         Checkout
       </Button>
     </Box>

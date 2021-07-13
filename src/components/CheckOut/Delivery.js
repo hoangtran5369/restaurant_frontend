@@ -93,7 +93,7 @@ function Delivery({ onFinished }) {
               }}
             >
               <MenuItem value="Pickup">Pickup</MenuItem>
-              <MenuItem value="Delivery">Delivery</MenuItem>
+              <MenuItem value="Doordash">DoorDash</MenuItem>
               <MenuItem value="Grubhub">Grubhub</MenuItem>
               <MenuItem value="Ubereats">Ubereats</MenuItem>
             </Select>
@@ -167,6 +167,30 @@ function Delivery({ onFinished }) {
                   </MyText>
                 </Box>
               )}
+            </Box>
+          )}
+          {deliveryOption == "Doordash" && (
+            <Box>
+              <MyText>
+                <br />
+                This option is coming soon !
+              </MyText>
+            </Box>
+          )}
+          {deliveryOption == "Grubhub" && (
+            <Box>
+              <MyText>
+                <br />
+                This option is coming soon !
+              </MyText>
+            </Box>
+          )}
+          {deliveryOption == "Ubereats" && (
+            <Box>
+              <MyText>
+                <br />
+                This option is coming soon !
+              </MyText>
             </Box>
           )}
         </FormContainer>
