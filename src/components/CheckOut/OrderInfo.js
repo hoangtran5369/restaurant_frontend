@@ -10,7 +10,8 @@ import {
   import styled from "styled-components";
   import { List, ListItem, ListItemText, ListItemSecondaryAction } from '@material-ui/core';
   import { useSelector } from 'react-redux';
-  import { getOrderItems } from 'store/Order/selector';
+  import { getOrderItems, getOrderItemInfo } from 'store/Order/selector';
+
 
    
   
@@ -52,9 +53,8 @@ import {
     overflow: scroll;
     `
   function OrderInfo({ onFinished }) {
-    const orderItems = useSelector(getOrderItems)
+    const orderItems = useSelector(getOrderItemInfo)
     return (
-
   
         <OrderContainer>
             <p>

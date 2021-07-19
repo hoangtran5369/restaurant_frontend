@@ -1,9 +1,12 @@
+import { SettingsPhone } from '@material-ui/icons';
 import { createSlice } from '@reduxjs/toolkit'
 
 export const orderReducer = createSlice({
     name: 'order',
     initialState: {
-        items: {}
+        items: {},
+        tipMultiplier: 0,
+        taxMultiplier: 0.1,        
     },
     reducers: {
         addOrder: (state, action) => {
@@ -24,6 +27,10 @@ export const orderReducer = createSlice({
         removeOrderItem: (state, action) => {
             const {orderKey} = action.payload;
             delete state.items[orderKey];
+        },
+        setTip: (state, action) => {
+            state.tipMultiplier = action.payload;
+
         }
     },
 })
@@ -31,7 +38,7 @@ export const orderReducer = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const { addOrder, changeQuantity, removeOrderItem } = orderReducer.actions
+export const { addOrder, changeQuantity, removeOrderItem, setTip } = orderReducer.actions
 
 export default orderReducer.reducer
 
