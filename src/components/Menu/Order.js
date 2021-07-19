@@ -1,49 +1,97 @@
 import {
-  List,
-  ListItem,
-  ListItemText,
-  IconButton,
-  Button,
+    List,
+    ListItem,
+    ListItemText,
+    TextField,
+    Typography,
+    Button,
+    Box
 } from "@material-ui/core";
-import DeleteIcon from '@material-ui/icons/Delete';
 import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { getOrderItems } from "store/Order/selector";
+import { useDispatch, useSelector } from "react-redux";
+import { getOrderItemInfo } from "store/Order/selector";
+import { changeQuantity, removeOrderItem } from "store/Order/reducer";
+import React from "react";
 
 const OrderItemImage = styled.img`
   height: 50px;
   width: 50px;
+  margin-right: 10px;
+  margin-top: 10px;
   object-fit: cover;
   border: 1mm ridge lightgrey;
   border-radius: 0.41rem;
 `;
 
-function Order(props) {
-  const orderItems = useSelector(getOrderItems);
+const QuantityPicker = styled(TextField)`
+    width: 80px;
+`
 
-  return (
-    <List dense>
-      {orderItems.map((order) => (
-        <List>
-          <ListItem>
-            <OrderItemImage src={order.imageUrl} alt={order.name} />
-             <p>{order.name} </p> 
-             <p> {order.description}  </p>              
-            </ListItem>
-          <ListItem>
-          <Button  variant="outlined" color="secondary"> - </Button>
-          <Button variant="outlined" color="primary"> + </Button>
-          <IconButton aria-label="delete">
-        <DeleteIcon />
-      </IconButton>
-          <ListItemText primary={`  ${order.quantity}`} />
-            {` $${order.price * order.quantity}`}
-            
-          </ListItem>
+
+
+function OrderItem(props) {
+    const { order } = props;
+    const dispatch = useDispatch();
+    const totalPrice = (order.itemPrice + order.addons.reduce((sum, addon) => sum + addon.price, 0)) * order.quantity;
+    const handleQuantityChange = (event) => {
+        if (event.target.value > 0 && event.target.value !== order.quantity) {
+            dispatch(changeQuantity({
+                orderKey: order.orderKey, 
+                quantity: event.target.value 
+            }))
+        }
+    }
+
+    const handleDelete = () => {
+        dispatch(removeOrderItem({ orderKey: order.orderKey }))
+    }
+
+    return (
+        <ListItem alignItems="flex-start">
+            <OrderItemImage src="https://i.imgur.com/yGeOUMB.jpg" />
+            <div>
+                <ListItemText
+                    primary={
+                        <Typography variant="h6" color="textPrimary">
+                            {order.itemName} - ${totalPrice.toFixed(2)}
+                        </Typography>
+                    }
+                    secondary={
+                        <React.Fragment>
+                            {order.addons.map(addon => (
+                                <Typography variant="body2" color="textSecondary">
+                                  -  {addon.name}
+                                </Typography>
+                            ))}
+                        </React.Fragment>
+                    }
+
+                />
+                <Box display="flex" alignItems="stretch" justifyContent="space-between" >
+
+                    <QuantityPicker type="number" variant="outlined" size="small" value={order.quantity} onChange={handleQuantityChange} />
+                    <Button
+                        disableRipple
+                        size="small"
+                        color="secondary"
+                        onClick={handleDelete}
+                    >Remove</Button>
+                </Box>
+            </ div>
+        </ListItem>
+    )
+}
+
+function Order() {
+    const orderItems = useSelector(getOrderItemInfo);
+
+    return (
+        <List dense>
+            {
+                orderItems.map(order => (<OrderItem order={order} />))
+            }
         </List>
-      ))}
-    </List>
-  );
+    );
 }
 
 export default Order;

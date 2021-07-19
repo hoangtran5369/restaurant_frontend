@@ -1,7 +1,5 @@
-import axios from 'axios';
 import api, {FoodMenuUrl} from 'store/api';
 
-const base_url = process.env.REACT_APP_API_URL
 
 export const fetchCategories = async () => {
     const resp = await api.get(FoodMenuUrl.getCategories);
@@ -13,4 +11,9 @@ export const fetchFoodMenuItems = async () => {
     return resp.data;
 }
 
-export default { fetchCategories, fetchFoodMenuItems };
+export const fetchMenu = async () => {
+    const resp = await api.get(FoodMenuUrl.getMenu);
+    return resp.data;
+}
+
+export default { fetchCategories, fetchFoodMenuItems, fetchMenu };

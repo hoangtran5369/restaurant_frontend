@@ -7,7 +7,8 @@ const api = axios.create({
 
 export const FoodMenuUrl = {
     getCategories: '/category',
-    getMenuItems: '/menu-item'
+    getMenuItems: '/menu-item',
+    getMenu: '/menu',
 }
 
 export default api

@@ -3,39 +3,28 @@ import foodMenuApi from 'store/FoodMenu/api';
 
 
 export const fetchCategories = createAsyncThunk(
-  'foodmenu/fetchCategories',
-  async () => {
-    const categories = await foodMenuApi.fetchCategories();
-    return categories;
-  }
+  'foodmenu/fetchCategories', foodMenuApi.fetchCategories
 )
 
 export const fetchFoodMenuItems = createAsyncThunk(
-  'foodmenu/fetchFoodMenuItems',
-  async () => {
-    const items = await foodMenuApi.fetchFoodMenuItems();
-    return items;
-  }
+  'foodmenu/fetchFoodMenuItems', foodMenuApi.fetchFoodMenuItems
+)
+
+export const fetchMenu = createAsyncThunk(
+  'foodmenu/fetchMenu', foodMenuApi.fetchMenu
 )
 
 export const foodMenuReducer = createSlice({
   name: 'foodmenu',
   initialState: {
+    loading: true,
     displayingItem: null,
-    categoryIndex: -1,
+    categoryIndex: 0,
     categories: [],
-
+    addonGroups: [],
     items: []
   },
   reducers: {
-    loadItems: (state, action) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.items = action.payload;
-    },
-
     displayItem: (state, action) => {
       state.displayingItem = action.payload;
     },
@@ -46,7 +35,7 @@ export const foodMenuReducer = createSlice({
 
     setCategoryIndex: (state, action) => {
       const newIndex = action.payload
-      if(Number.isInteger(newIndex) && newIndex < state.categories.length){
+      if(Number.isInteger(newIndex) && newIndex < state.categories.length && newIndex >= 0){
         state.categoryIndex = action.payload;
       }
     },
@@ -54,21 +43,21 @@ export const foodMenuReducer = createSlice({
     clearCategoryIndex: (state) => {
       state.categoryIndex = -1;
     }
-
   },
 
   extraReducers: (builder) => {
-    builder.addCase(fetchCategories.fulfilled, (state, action) => {
-      state.categories = action.payload;
+    builder.addCase(fetchMenu.pending, (state) => {
+      state.loading = true;
     });
-
-    builder.addCase(fetchFoodMenuItems.fulfilled, (state, action) => {
-      state.items = action.payload;
+    builder.addCase(fetchMenu.fulfilled, (state, action) => {
+      state.loading = false;
+      state.categories = action.payload.categories;
+      state.addonGroups = action.payload.addonGroups;
     });
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { loadItems, displayItem, hideItem, setCategoryIndex, clearCategoryIndex } = foodMenuReducer.actions
+export const { displayItem, hideItem, setCategoryIndex, clearCategoryIndex } = foodMenuReducer.actions
 
 export default foodMenuReducer.reducer

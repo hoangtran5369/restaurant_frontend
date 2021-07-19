@@ -3,19 +3,25 @@ import {createSelector} from "@reduxjs/toolkit";
 export const foodMenuSelector = state => state.foodMenu;
 
 
-export const getFoodMenuItems = createSelector(
-    foodMenuSelector, 
-    (foodMenu) => foodMenu.items
-);
-
-export const itemIsDisplayed = createSelector(
+export const getAddonGroups = createSelector(
     foodMenuSelector,
-    (foodMenu) => (foodMenu.displayingItem != null)
+    (foodMenu) => foodMenu.addonGroups
+)
+export const getAllAddons = createSelector(
+    getAddonGroups,
+    (addonGroups) => addonGroups.map(group => group.addons).flat()
 )
 
-export const getDisplayedItem = createSelector(
+export const getAllAddonDict = createSelector(
+    getAllAddons,
+    (addon) => addon.reduce((dict, addon) => 
+        { return {...dict, [addon.id]: addon} },
+        {})
+)
+
+export const isLoading = createSelector(
     foodMenuSelector,
-    (foodMenu) => foodMenu.displayingItem
+    (foodMenu) => foodMenu.loading
 )
 
 export const getCategories = createSelector(
@@ -35,10 +41,46 @@ export const getCategoryIndex = createSelector(
 
 export const getCurrCategory = createSelector(
     getCategories, getCategoryIndex, 
-    (categories, index) => index === -1 ? null : categories[index]
+    (categories, index) => {
+        if ((categories.length <= index || index < 0)) {
+            return null;
+        }
+        return categories[index];  
+    }
+)
+
+export const getAllItems = createSelector(
+    getCategories,
+    (categories) => categories.map(category => category.menuItems).flat()
+)
+
+export const getAllItemDict = createSelector(
+    getAllItems,
+    (items) => items.reduce((dict, item) => 
+        { return {...dict, [item.id]: item} },
+        {})
 )
 
 export const getFilteredItems = createSelector(
-    getFoodMenuItems, getCurrCategory,
-    (foodMenuItems, category) => foodMenuItems.filter(item => (category === null || item.categoryId === category.id))
+    isLoading, getCurrCategory,
+    (loading, category) => loading ? [] : category.menuItems
 )
+
+export const itemIsDisplayed = createSelector(
+    foodMenuSelector,
+    (foodMenu) => (foodMenu.displayingItem != null)
+)
+
+export const getDisplayedItem = createSelector(
+    foodMenuSelector,
+    (foodMenu) => foodMenu.displayingItem
+)
+
+export const getDisplayedItemAddons = createSelector(
+    getDisplayedItem, getAddonGroups,
+    (displayedItem, addonGroups) => {
+        if (displayedItem == null ) { return [] }
+        return addonGroups.filter(group => displayedItem.addonGroupIds.includes(group.id))
+    }
+)
+
