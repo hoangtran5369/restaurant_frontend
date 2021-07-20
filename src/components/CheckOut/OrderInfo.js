@@ -11,6 +11,9 @@ import {
   import { List, ListItem, ListItemText, ListItemSecondaryAction } from '@material-ui/core';
   import { useSelector } from 'react-redux';
   import { getOrderItems, getOrderItemInfo } from 'store/Order/selector';
+  import Order from "components/Menu/Order";
+   import { PriceDisplay } from "components/Menu/Cart";
+  
 
 
    
@@ -59,43 +62,12 @@ import {
         <OrderContainer>
             <p>
                 ORDER SUMMARY
-                <OrderList dense>
-                    {orderItems.map(order => (
-                    <ListItem>
-                        <ListItemText primary={`${order.name} x ${order.quantity}`} />
-                        <ListItemSecondaryAction> {`$${(order.price * order.quantity)}`}</ListItemSecondaryAction>
-                    </ListItem>
-                    ))}
+                <OrderList >
+                <Order editable={false} />
                 </OrderList>
             </p>
             <Divider></Divider>
-            <List dense>
-                <ListItem>
-                        <ListItemText primary="Subtotal"></ListItemText>
-                        <ListItemSecondaryAction> US$7.50</ListItemSecondaryAction>
-                </ListItem>
-
-                <ListItem>
-                        <ListItemText primary="Tip"></ListItemText>
-                        <ListItemSecondaryAction> US$0.00</ListItemSecondaryAction>
-                </ListItem>
-
-                <ListItem>
-                        <ListItemText primary="In-store pickup"></ListItemText>
-                        <ListItemSecondaryAction> US$0.00</ListItemSecondaryAction>
-                </ListItem>
-
-                <ListItem>
-                        <ListItemText primary="Taxes (US)"></ListItemText>
-                        <ListItemSecondaryAction> US$0.00</ListItemSecondaryAction>
-                </ListItem>
-
-                <Divider></Divider>
-                <ListItem>
-                        <h1><ListItemText primary="Order Total"></ListItemText></h1>
-                        <ListItemSecondaryAction> US$7.50</ListItemSecondaryAction>
-                </ListItem>
-            </List>
+            <PriceDisplay />
         </OrderContainer>
         
     );

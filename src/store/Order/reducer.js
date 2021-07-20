@@ -5,7 +5,7 @@ export const orderReducer = createSlice({
     name: 'order',
     initialState: {
         items: {},
-        tipMultiplier: 0,
+        tipMultiplier: 0.1,
         taxMultiplier: 0.1,        
     },
     reducers: {

@@ -46,3 +46,36 @@ export const getSubtotal = createSelector(
         return sum + (pricePerItem * order.quantity)
     },0)
 )
+
+export const getTipMultiplier = createSelector(
+    orderSelector, 
+    (orders) => orders.tipMultiplier
+)
+
+export const getTip = createSelector(    
+    getTipMultiplier, getSubtotal, 
+    (tipMultiplier, subtotal) => tipMultiplier*subtotal
+)
+
+
+
+export const getTaxMultiplier = createSelector(
+    orderSelector,
+    (order) => order.taxMultiplier
+)
+
+export const getTax  = createSelector(
+    getTaxMultiplier, getSubtotal,
+    (taxMultiplier, subtotal) => subtotal*taxMultiplier
+)
+
+
+export const getTotal = createSelector(    
+    getSubtotal,  getTip,  getTax, 
+    ( subtotalAmount, tipAmount, taxAmount) => subtotalAmount  + tipAmount + taxAmount 
+)
+
+export const orderIsEmpty = createSelector(
+    getOrderItems,
+    (orderItem) => Object.keys(orderItem).length === 0 
+)

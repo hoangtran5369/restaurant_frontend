@@ -27,10 +27,8 @@ const QuantityPicker = styled(TextField)`
     width: 80px;
 `
 
-
-
 function OrderItem(props) {
-    const { order } = props;
+    const { order, editable } = props;
     const dispatch = useDispatch();
     const totalPrice = (order.itemPrice + order.addons.reduce((sum, addon) => sum + addon.price, 0)) * order.quantity;
     const handleQuantityChange = (event) => {
@@ -67,7 +65,8 @@ function OrderItem(props) {
                     }
 
                 />
-                <Box display="flex" alignItems="stretch" justifyContent="space-between" >
+
+                <Box display={editable ? "flex" : "none" } alignItems="stretch" justifyContent="space-between" >
 
                     <QuantityPicker type="number" variant="outlined" size="small" value={order.quantity} onChange={handleQuantityChange} />
                     <Button
@@ -82,13 +81,14 @@ function OrderItem(props) {
     )
 }
 
-function Order() {
+function Order(props) {
     const orderItems = useSelector(getOrderItemInfo);
+    const {editable} = props
 
     return (
         <List dense>
             {
-                orderItems.map(order => (<OrderItem order={order} />))
+                orderItems.map(order => (<OrderItem order={order} editable={editable} />))
             }
         </List>
     );
