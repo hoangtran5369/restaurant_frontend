@@ -19,6 +19,7 @@ import { itemIsDisplayed, getDisplayedItem, getDisplayedItemAddons } from "store
 import { hideItem } from "store/FoodMenu/reducer";
 import React, { useEffect, useState } from "react";
 import { addOrder } from "store/Order/reducer";
+import { set } from "react-hook-form";
 
 const MyModal = styled(Modal)`
   margin: auto;
@@ -92,7 +93,9 @@ function FoodItemModal() {
     const [quantity, updateQuantity] = useState(1);
 
     const [pickedAddons, setPickedAddons] = useState({});
-    const handleOrder = () => {
+    useEffect(() => {setPickedAddons({})},[item]);
+
+    const handleOrder = () => {        
         const addons = Object.keys(pickedAddons).filter(addonId => pickedAddons[addonId]);
         dispatch(addOrder({ item, quantity, addons }));
         dispatch(hideItem());
