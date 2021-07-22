@@ -11,13 +11,11 @@ export const getOrderItems = createSelector(
 
 export const getOrderItemInfo = createSelector(
     getOrderItems, getAllItemDict, getAllAddonDict,
-    (orderQuantityDict, itemDict, addonDict) => {
-        const result = Object.entries(orderQuantityDict).map(([orderKey, quantity]) => {
-            const orderKeyArr = orderKey.split("---");
-            const itemId = orderKeyArr[0];
-            const addonIdList = orderKeyArr.slice(1);
+    (orderDict, itemDict, addonDict) => {
+        const result = Object.entries(orderDict).map(([orderKey, order]) => {
+            const {itemId, addonIds, quantity} = order;
             const foundItem = itemDict[itemId];
-            const foundAddons = addonIdList.map(id => {
+            const foundAddons = addonIds.map(id => {
                return {
                 id,
                 name: addonDict[id].name,
