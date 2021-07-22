@@ -34,7 +34,7 @@ const AppRoutes = () => {
     return (
         <Router>
             <Switch>
-                {route_config.map(route => <Route exact={route.exact} path={route.path} component={route.component} />)}
+                {route_config.map((route, index) => <Route key={index} exact={route.exact} path={route.path} component={route.component} />)}
             </Switch>
         </Router>
     )

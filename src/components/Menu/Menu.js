@@ -79,7 +79,7 @@ function Menu() {
                             {showLoading && <h1>LOADING</h1>}
                             <List>
                                 {foodMenuItems.map((item) => (
-                                    <FoodMenuItem item={item} />
+                                    <FoodMenuItem key={item.id} item={item} />
                                 ))}
                             </List>
                         </MenuListContainer>

@@ -10,7 +10,7 @@ import {
 } from "store/FoodMenu/selector";
 
 import React from "react";
-import { setCategoryIndex, clearCategoryIndex } from "store/FoodMenu/reducer";
+import { setCategoryIndex } from "store/FoodMenu/reducer";
 
 
 
@@ -20,12 +20,7 @@ function CategoryPicker() {
     const dispatch = useDispatch();
 
     const handleCategoryChange = (e, newIndex) => {
-        if (newIndex === 0) {
-            dispatch(clearCategoryIndex())
-        }
-        else {
-            dispatch(setCategoryIndex(newIndex - 1))
-        }
+            dispatch(setCategoryIndex(newIndex))
     }
 
     return (
@@ -33,12 +28,11 @@ function CategoryPicker() {
             <Tabs
                 orientation="vertical"
                 variant="scrollable"
-                value={(categoryIndex === null ? 0 : categoryIndex + 1)}
+                value={(categoryIndex)}
                 onChange={handleCategoryChange}
                 aria-label="Vertical tabs example"
             >
-                <Tab label="Full menu" />
-                {categories.map((category) => <Tab label={category} />)}
+                {categories.map((category, index) => <Tab key={index} label={category} />)}
             </Tabs>
         </Box>
     );

@@ -40,9 +40,6 @@ export const foodMenuReducer = createSlice({
       }
     },
 
-    clearCategoryIndex: (state) => {
-      state.categoryIndex = -1;
-    }
   },
 
   extraReducers: (builder) => {
@@ -58,6 +55,6 @@ export const foodMenuReducer = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { displayItem, hideItem, setCategoryIndex, clearCategoryIndex } = foodMenuReducer.actions
+export const { displayItem, hideItem, setCategoryIndex } = foodMenuReducer.actions
 
 export default foodMenuReducer.reducer
