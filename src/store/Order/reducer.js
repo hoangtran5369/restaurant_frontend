@@ -23,23 +23,24 @@ export const orderReducer = createSlice({
     reducers: {
         addOrder: {
             reducer: (state, action) => {
-                const { orderKey, itemId, quantity, addonIds } = action.payload;
+                const { orderKey, itemId, quantity, addonIds, specialInstruction } = action.payload;
                 if (orderKey in state.items) {
                     state.items[orderKey].quantity += quantity
                 } else {
                     state.items[orderKey] = {
-                        itemId, quantity, addonIds
+                        itemId, quantity, addonIds, specialInstruction
                     }
                 }
             },
-            prepare: ({item, quantity, addons}) => {
-                const orderKey = getHash([item.id, ...(addons.concat().sort())].join());
+            prepare: ({item, quantity, addons, specialInstruction}) => {
+                const orderKey = getHash([item.id, specialInstruction, ...(addons.concat().sort())].join());
                 return {
                     payload: {
                         orderKey: orderKey,
                         itemId: item.id,
                         addonIds: addons,
                         quantity: quantity,
+                        specialInstruction: specialInstruction
                     }
                 }
             }
@@ -47,7 +48,7 @@ export const orderReducer = createSlice({
 
         changeQuantity: (state, action) => {
             const { orderKey, quantity } = action.payload;
-            state.items[orderKey] = quantity;
+            state.items[orderKey].quantity = quantity;
         },
 
         removeOrderItem: (state, action) => {

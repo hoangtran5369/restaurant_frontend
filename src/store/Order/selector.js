@@ -13,7 +13,7 @@ export const getOrderItemInfo = createSelector(
     getOrderItems, getAllItemDict, getAllAddonDict,
     (orderDict, itemDict, addonDict) => {
         const result = Object.entries(orderDict).map(([orderKey, order]) => {
-            const {itemId, addonIds, quantity} = order;
+            const {itemId, addonIds, quantity, specialInstruction} = order;
             const foundItem = itemDict[itemId];
             const foundAddons = addonIds.map(id => {
                return {
@@ -29,7 +29,8 @@ export const getOrderItemInfo = createSelector(
                 itemName: foundItem.name,
                 itemPrice: foundItem.price,
                 quantity: quantity,
-                addons: foundAddons
+                addons: foundAddons,
+                specialInstruction
             }
         })
         return result;

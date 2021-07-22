@@ -55,12 +55,16 @@ function OrderItem(props) {
                         </Typography>
                     }
                     secondary={
-                        <React.Fragment>
+                        <React.Fragment>  
                             {order.addons.map(addon => (
                                 <Typography variant="body2" color="textSecondary">
                                   -  {addon.name}
                                 </Typography>
+
                             ))}
+                            <Typography variant="body2" color="textSecondary">
+                                  **  {order.specialInstruction}
+                                </Typography>
                         </React.Fragment>
                     }
 

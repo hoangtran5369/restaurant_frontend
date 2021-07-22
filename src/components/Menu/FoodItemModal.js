@@ -1,21 +1,27 @@
 import {
-    Box,
-    Grid,
-    GridList,
-    GridListTile,
-    FormControl,
-    Modal,
-    FormControlLabel,
-    Checkbox,
-    TextField,
-    Button,
-    Typography,
-    FormLabel,
-    Divider,
+  Box,
+  Grid,
+  GridList,
+  GridListTile,
+  FormControl,
+  Modal,
+  FormControlLabel,
+  Checkbox,
+  TextField,
+  Button,
+  Typography,
+  FormLabel,
+  Divider,
+  MenuItem,
+  Select,
 } from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { itemIsDisplayed, getDisplayedItem, getDisplayedItemAddons } from "store/FoodMenu/selector";
+import {
+  itemIsDisplayed,
+  getDisplayedItem,
+  getDisplayedItemAddons,
+} from "store/FoodMenu/selector";
 import { hideItem } from "store/FoodMenu/reducer";
 import React, { useEffect, useState } from "react";
 import { addOrder } from "store/Order/reducer";
@@ -85,121 +91,176 @@ const PreviewImage = styled.img`
 `;
 
 function FoodItemModal() {
-    const modalOpen = useSelector(itemIsDisplayed);
-    const item = useSelector(getDisplayedItem);
-    const addonGroups = useSelector(getDisplayedItemAddons);
-    const dispatch = useDispatch();
-    const [quantity, updateQuantity] = useState(1);
+  const modalOpen = useSelector(itemIsDisplayed);
+  const item = useSelector(getDisplayedItem);
+  const addonGroups = useSelector(getDisplayedItemAddons);
+  const dispatch = useDispatch();
+  const [quantity, updateQuantity] = useState(1);
+  const [specialInstruction, setSpecialInstruction] = useState("");
+  const [pickedAddons, setPickedAddons] = useState(addonGroups.reduce( 
+      (dict, group)=>{return {...dict,[group.id]: {} }}, {}));
+  useEffect(() => {
+    setPickedAddons({});
+  }, [item]);
 
-    const [pickedAddons, setPickedAddons] = useState({});
-    useEffect(() => {setPickedAddons({})},[item]);
+  const handleOrder = () => {
+      const addons = Object.values(pickedAddons).reduce( (addonList, groupAddons)=> {
+        return  addonList.concat(Object.keys(groupAddons).filter(addonId => groupAddons[addonId]))
+      }, [] )
+   // const addons = Object.keys(pickedAddons).filter(
+    //  (addonId) => pickedAddons[addonId]
+  //  );
+    dispatch(addOrder({ item, quantity, addons, specialInstruction }));
+    dispatch(hideItem());
+  };
 
-    const handleOrder = () => {        
-        const addons = Object.keys(pickedAddons).filter(addonId => pickedAddons[addonId]);
-        dispatch(addOrder({ item, quantity, addons }));
-        dispatch(hideItem());
-    };
+  const handleAddonCheck = (groupid) => (event) => {
+    setPickedAddons({
+      ...pickedAddons, 
+      [groupid]: {...pickedAddons[groupid],  [event.target.name]: event.target.checked }
 
+    });
+  };
 
-    const handleAddonCheck = (event) => {
-        setPickedAddons(
-            {
-                ...pickedAddons,
-                [event.target.name]: event.target.checked
-            }
-        )
+  const handleAddonSelect = (groupid) => (event) =>{
+    setPickedAddons({
+        ...pickedAddons,
+        [groupid]: {[event.target.value]: true}        
+      });
 
-    }
+  };
 
-    return (
-        <MyModal
-            BackdropProps={{ invisible: true }}
-            open={modalOpen}
-            onClose={() => dispatch(hideItem())}
-        >
-            <MainContainer>
-                <LeftContainer>
-                    <Grid
-                        container
-                        direction="row"
-                        justify="space-around"
-                        alignItems="stretch"
-                    >
-                        <Grid item xs={2}>
-                            <GalleryList cellHeight="auto" cols={1}>
-                                <GridListTile>
-                                    <PreviewContainer>
-                                        <PreviewImage
-                                            src="https://i.imgur.com/yGeOUMB.jpg"
-                                            alt=""
-                                        />
-                                    </PreviewContainer>
-                                </GridListTile>
-                            </GalleryList>
-                        </Grid>
-                        <Grid item xs={9}>
-                            <ImageContainer></ImageContainer>
-                        </Grid>
-                    </Grid>
-                </LeftContainer>
-                <RightContainer>
-                    <Typography variant="h4">{item && item.name}</Typography>
-                    <Typography variant="h5" gutterBottom>
-                        ${item && item.price}
-                    </Typography>
-                    <Box marginY="20px">
-                        {addonGroups.map(group => (
-                            <FormControl component="fieldset">
-                                <FormLabel component="legend">{group.name}</FormLabel>
-                                {group.addons.map((addon) => (
-                                    <div>
-                                        <FormControlLabel
-                                            control={<Checkbox name={addon.id} color="primary" onChange={handleAddonCheck} />}
-                                            label={`${addon.name} ${addon.price !== 0 ? `(+$${addon.price})` : ""}`}
-                                        />
-                                    </div>
-                                ))}
+  return (
+    <MyModal
+      BackdropProps={{ invisible: true }}
+      open={modalOpen}
+      onClose={() => dispatch(hideItem())}
+    >
+      <MainContainer>
+        <LeftContainer>
+          <Grid
+            container
+            direction="row"
+            justify="space-around"
+            alignItems="stretch"
+          >
+            <Grid item xs={2}>
+              <GalleryList cellHeight="auto" cols={1}>
+                <GridListTile>
+                  <PreviewContainer>
+                    <PreviewImage
+                      src="https://i.imgur.com/yGeOUMB.jpg"
+                      alt=""
+                    />
+                  </PreviewContainer>
+                </GridListTile>
+              </GalleryList>
+            </Grid>
+            <Grid item xs={9}>
+              <ImageContainer></ImageContainer>
+            </Grid>
+          </Grid>
+        </LeftContainer>
+        <RightContainer>
+          <Typography variant="h4">{item && item.name}</Typography>
+          <Typography variant="h5" gutterBottom>
+            ${item && item.price}
+          </Typography>
+          <Box marginY="20px">
+            {addonGroups.map((group) =>  {
+            
+              if (group.maxQuantity==null)  {
+                return (
+                    <div>
+                    <FormControl fullWidth component="fieldset">
+                      <FormLabel component="legend">{group.name}</FormLabel>
+    
+                      {group.addons.map((addon) => (
+                        <div>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                name={addon.id}
+                                color="primary"
+                                onChange={handleAddonCheck(group.id)}
+                              />
+                            }
+                            label={`${addon.name} ${
+                              addon.price !== 0 ? `(+$${addon.price})` : ""
+                            }`}
+                          />
+                        </div>
+                      ))}
+                    </FormControl>
+                    </div>
+                  );
+              } 
+              else  {
+                  return(
+                      <Box marginY="30px">
+                    <FormControl    component="fieldset">
+                    <FormLabel component="legend">{group.name}</FormLabel>      
+                    <Select 
+                    onChange={handleAddonSelect(group.id)}
+                    on
+                    defaultValue={group.minQuantity == 0 ? "" : group.addons[0].id}>
+                        {group.minQuantity == 0 && <MenuItem value="">
+                            None
+                        </MenuItem>}
+                        
+                        {group.addons.map((addon) => (
+                            <MenuItem value={addon.id} > {addon.name}  </MenuItem>
 
-                            </FormControl>
                         ))}
-
-                        <FormControl component="fieldset">
-                            <TextField
-                                id="outlined-multiline-static"
-                                label="Special instructions"
-                                multiline
-                                rows={2}
-                                variant="outlined"
-                            />
-                        </FormControl>
+                    </Select>
+                    </FormControl>
                     </Box>
 
-                    <Divider />
+                  )                  
+              }           
+              
+            })
+            
+            }
 
-                    <Box display="flex" alignContent="stretch" paddingTop="20px">
-                        <QuantityPicker
-                            label="Count"
-                            value={quantity}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            type="number"
-                            defaultValue={1}
-                            variant="outlined"
-                            onChange={(event) => updateQuantity(event.target.value)}
-                        />
-                        <OrderButton
-                            variant="contained"
-                            onClick={handleOrder}
-                            color="primary"
-                        >
-                            Add to cart
+            <FormControl component="fieldset">
+              <TextField
+                id="outlined-multiline-static"
+                label="Special instructions"
+                onChange={(event) => setSpecialInstruction(event.target.value)}
+                multiline
+                rows={2}
+                variant="outlined"
+              />
+            </FormControl>
+          </Box>
+
+          <Divider />
+
+          <Box display="flex" alignContent="stretch" paddingTop="20px">
+            <QuantityPicker
+              label="Count"
+              value={quantity}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              type="number"
+              defaultValue={1}
+              variant="outlined"
+              onChange={(event) => updateQuantity(event.target.value)}
+            />
+            <OrderButton
+              variant="contained"
+              onClick={handleOrder}
+              color="primary"
+            >
+              Add to cart
             </OrderButton>
-                    </Box>
-                </RightContainer>
-            </MainContainer>
-        </MyModal>
-    );
+          </Box>
+        </RightContainer>
+      </MainContainer>
+    </MyModal>
+  );
 }
 
 export default FoodItemModal;
