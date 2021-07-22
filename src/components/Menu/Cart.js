@@ -1,6 +1,5 @@
 import {
   Box,
-  Typography,
   Button,
   Divider,
   List,
@@ -10,11 +9,9 @@ import {
   Select,
   MenuItem,
 } from "@material-ui/core";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Order from "components/Menu/Order";
 import {
-  getOrderItems,
   getSubtotal,
   getTip,
   getTotal,

@@ -16,4 +16,5 @@ export const fetchMenu = async () => {
     return resp.data;
 }
 
-export default { fetchCategories, fetchFoodMenuItems, fetchMenu };
+const FoodMenuApi = { fetchCategories, fetchFoodMenuItems, fetchMenu };
+export default FoodMenuApi;

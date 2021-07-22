@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import styled from 'styled-components'
 import Navbar from './Navbar';
 import Footer from './Footer';

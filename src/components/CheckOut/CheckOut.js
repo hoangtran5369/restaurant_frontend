@@ -2,10 +2,6 @@ import {
     Box,
     Card,
     CardContent,
-    MenuItem,
-    InputLabel,
-    Select,
-    FormControl,
     Tabs,
     Tab,
     Typography,
@@ -18,7 +14,6 @@ import {
   import Payments from "components/CheckOut/Payment";
   import ReviewSubmit from "components/CheckOut/ReviewSubmit";
   import { useState } from "react";
-  import { set } from "react-hook-form";
   
   
   const StyledCard = styled(Card)`

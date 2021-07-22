@@ -57,7 +57,7 @@ function Menu() {
 
     useEffect(() => {
         dispatch(fetchMenu());
-    }, []);
+    }, [dispatch]);
 
     return (
         <React.Fragment>

@@ -1,7 +1,6 @@
 import Navbar from './Navbar';
-import { Box, Button, Card, CardContent, CardHeader, Grid, Typography, List, ListItem, ListItemText } from "@material-ui/core";
+import { Box, Card, CardContent, CardHeader, Grid, Typography, List, ListItem, ListItemText } from "@material-ui/core";
 import Footer from './Footer';
-import { Link } from 'react-router-dom';
 
 
 

@@ -1,9 +1,9 @@
-import { Button, Card, CardContent, Divider, Grid, TextField, Typography, Box } from "@material-ui/core";
+import { Button, Card, CardContent, TextField, Typography, Box } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import Navbar from "./Navbar";
 import {useForm} from "react-hook-form";
 import {logIn} from "../store/auth/reducer";
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import styled from "styled-components";
 
 const InputField = styled(TextField)`

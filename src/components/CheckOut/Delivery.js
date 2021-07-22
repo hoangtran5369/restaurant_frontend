@@ -2,10 +2,7 @@ import {
   Box,
   Button,
   Divider,
-  TextField,
   FormControlLabel,
-  Checkbox,
-  Typography,
   FormControl,
   MenuItem,
   Select,
@@ -26,28 +23,12 @@ const MyContainer = styled.div`
   margin-bottom: 30px;
 `;
 
-const InfoTextField = styled(TextField)`
-  margin-bottom: 10px;
-`;
 
 const FormContainer = styled.div`
   width: 50%;
   padding-right: 30px;
 `;
-const OrderContainer = styled.div`
-  width: 50%;
-  align-items: stretch;
-  padding-left: 30px;
-`;
-const CheckBoxLabel = styled((props) => (
-  <FormControlLabel {...props} classes={{ label: "checkbox-label" }} />
-))`
-  margin-top: 20px;
 
-  & > .checkbox-label {
-    font-size: 0.8rem;
-  }
-`;
 
 const SubmitButton = styled(Button)`
   padding: 10px;
@@ -98,7 +79,7 @@ function Delivery({ onFinished }) {
               <MenuItem value="Ubereats">Ubereats</MenuItem>
             </Select>
           </DeliverySelector>
-          {deliveryOption == "Pickup" && (
+          {deliveryOption === "Pickup" && (
             <Box>
               <p>Pickup at</p>
               <MyText>Pho 28</MyText>
@@ -122,7 +103,7 @@ function Delivery({ onFinished }) {
                   label="Schedule for later"
                 />
               </RadioGroup>
-              {pickUpTimeOption == "now" && (
+              {pickUpTimeOption === "now" && (
                 <Box>
                   <MyText>Your order will be ready</MyText>
                   <MyText>Today after 1:00 PM</MyText>
@@ -131,7 +112,7 @@ function Delivery({ onFinished }) {
                   </MyText>
                 </Box>
               )}
-              {pickUpTimeOption == "later" && (
+              {pickUpTimeOption === "later" && (
                 <Box>
                   <Select
                     disableUnderline
@@ -169,7 +150,7 @@ function Delivery({ onFinished }) {
               )}
             </Box>
           )}
-          {deliveryOption == "Doordash" && (
+          {["Doordash", "Grubhub", "Ubereats"].includes(deliveryOption) && (
             <Box>
               <MyText>
                 <br />
@@ -177,22 +158,7 @@ function Delivery({ onFinished }) {
               </MyText>
             </Box>
           )}
-          {deliveryOption == "Grubhub" && (
-            <Box>
-              <MyText>
-                <br />
-                This option is coming soon !
-              </MyText>
-            </Box>
-          )}
-          {deliveryOption == "Ubereats" && (
-            <Box>
-              <MyText>
-                <br />
-                This option is coming soon !
-              </MyText>
-            </Box>
-          )}
+        
         </FormContainer>
 
         <OrderInfo></OrderInfo>

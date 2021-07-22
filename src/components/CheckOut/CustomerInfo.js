@@ -3,9 +3,7 @@ import {
   Button,
   Divider,
   TextField,
-  FormControlLabel,
-  Checkbox,
-  Typography,
+
 } from "@material-ui/core";
 import styled from "styled-components";
 import OrderInfo from "components/CheckOut/OrderInfo";
@@ -28,18 +26,7 @@ const FormContainer = styled.div`
   width: 50%;
   padding-right: 30px;
 `;
-const OrderContainer = styled.div`
-  width: 50%;
-  align-items: stretch;
-  padding-left: 30px;
-`;
-const CheckBoxLabel = styled(props => <FormControlLabel {...props} classes={{label: 'checkbox-label'}}/>)`
-  margin-top: 20px;
 
-  & > .checkbox-label {
-    font-size: 0.8rem;
-  }
-`;
 
 const SubmitButton = styled(Button)`
   padding: 10px;

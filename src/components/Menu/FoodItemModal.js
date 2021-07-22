@@ -19,7 +19,6 @@ import { itemIsDisplayed, getDisplayedItem, getDisplayedItemAddons } from "store
 import { hideItem } from "store/FoodMenu/reducer";
 import React, { useEffect, useState } from "react";
 import { addOrder } from "store/Order/reducer";
-import { set } from "react-hook-form";
 
 const MyModal = styled(Modal)`
   margin: auto;
@@ -112,11 +111,6 @@ function FoodItemModal() {
 
     }
 
-    useEffect(() => {
-        console.log(pickedAddons)
-    }
-        , [pickedAddons])
-
     return (
         <MyModal
             BackdropProps={{ invisible: true }}
@@ -161,7 +155,7 @@ function FoodItemModal() {
                                     <div>
                                         <FormControlLabel
                                             control={<Checkbox name={addon.id} color="primary" onChange={handleAddonCheck} />}
-                                            label={`${addon.name} ${addon.price != 0 ? `(+$${addon.price})` : ""}`}
+                                            label={`${addon.name} ${addon.price !== 0 ? `(+$${addon.price})` : ""}`}
                                         />
                                     </div>
                                 ))}

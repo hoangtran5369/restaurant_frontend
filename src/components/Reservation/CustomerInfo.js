@@ -8,8 +8,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import styled from "styled-components";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
 
 
 const MyContainer = styled.div`

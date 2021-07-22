@@ -1,21 +1,10 @@
 import {
   Box,
   Button,
-  Grid,
-  Typography,
-  Card,
-  CardHeader,
-  StepLabel,
-  Step,
-  Stepper,
-  InputBase,
   MenuItem,
   Select,
-  FormControl,
 } from "@material-ui/core";
 import styled from "styled-components";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
 
 
 const SelectRow = styled.div`

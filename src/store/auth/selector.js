@@ -10,6 +10,6 @@ export const getUser = createSelector(
 
 export const userLoggedIn = createSelector(
     getUser,
-    (user) => (user.id != "")
+    (user) => (user.id !== "")
 )
 

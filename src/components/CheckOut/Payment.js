@@ -20,10 +20,6 @@ const MyContainer = styled.div`
   margin-bottom: 30px;
 `;
 
-const InfoTextField = styled(TextField)`
-  margin-bottom: 10px;
-`;
-
 const FormContainer = styled.div`
   width: 50%;
   padding-right: 30px;
@@ -94,7 +90,7 @@ function Payment({ onFinished }) {
             />
             <FormControlLabel value="cash" control={<Radio />} label="Cash" />
           </RadioGroup>
-          {value == "credit" && (
+          {value === "credit" && (
             <Box>
               <TextField
                 onChange={handleCardNumberChange}
@@ -127,7 +123,7 @@ function Payment({ onFinished }) {
               />
             </Box>
           )}
-          {value == "paypal" && (
+          {value === "paypal" && (
             <Box>
               <MyText>
                 You will be redirected to PayPal to authorize payment, once you
@@ -135,7 +131,7 @@ function Payment({ onFinished }) {
               </MyText>
             </Box>
           )}
-          {value == "cash" && (
+          {value === "cash" && (
             <Box>
               <MyText>
                 Please make the payment at the counter / cashier to finish this

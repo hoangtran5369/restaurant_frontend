@@ -2,7 +2,7 @@ import { useHistory } from "react-router-dom";
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
-import { Grid, Typography, Menu, MenuItem } from "@material-ui/core";
+import { Typography, Menu, MenuItem } from "@material-ui/core";
 import { userLoggedIn } from "../store/auth/selector";
 import { useSelector, useDispatch } from 'react-redux'
 import React from "react";

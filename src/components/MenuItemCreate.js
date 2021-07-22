@@ -89,12 +89,12 @@ function MenuItemCreate() {
                 <Box width="60%">
                     <h1>Create a new menu item</h1>
 
-                    {step == 0 ? <FormPart1 /> : <FormPart2 />}
+                    {step === 0 ? <FormPart1 /> : <FormPart2 />}
 
                     <Box display="flex" flexDirection="row-reverse">
 
-                        <Button variant="contained" disabled={step == 1} onClick={() => updateStep(1)}> Next</Button>
-                        <Button variant="contained" disabled={step == 0} onClick={() => updateStep(0)}> Previous</Button>
+                        <Button variant="contained" disabled={step === 1} onClick={() => updateStep(1)}> Next</Button>
+                        <Button variant="contained" disabled={step === 0} onClick={() => updateStep(0)}> Previous</Button>
                         <Button variant="contained"> Save as Draft</Button>
                     </Box>
                 </Box>

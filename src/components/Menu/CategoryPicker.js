@@ -5,8 +5,6 @@ import {
 } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import {
-
-    getCategories,
     getCategoryIndex,
     getCategoryNames
 } from "store/FoodMenu/selector";

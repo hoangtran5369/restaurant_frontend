@@ -2,21 +2,15 @@ import {
   Box,
   Card,
   CardContent,
-  MenuItem,
-  InputLabel,
-  Select,
-  FormControl,
   Tabs,
   Tab,
   Typography,
 } from "@material-ui/core";
 import styled from "styled-components";
 import Navbar from "../Navbar";
-import Footer from "../Footer";
 import FindATable from "./FindTable";
 import CustomerInfo from "./CustomerInfo";
 import { useState } from "react";
-import { set } from "react-hook-form";
 
 
 const StyledCard = styled(Card)`
