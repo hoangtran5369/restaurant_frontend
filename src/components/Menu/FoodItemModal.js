@@ -12,8 +12,9 @@ import {
   Typography,
   FormLabel,
   Divider,
-  MenuItem,
-  Select,
+  FormGroup,
+  RadioGroup,
+  Radio,
 } from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,6 +41,7 @@ const MainContainer = styled.div`
   display: flex;
   padding: 2rem;
   height: 100%;
+  overflow: scroll;
 `;
 
 const LeftContainer = styled.div`
@@ -90,6 +92,70 @@ const PreviewImage = styled.img`
   position: absolute;
 `;
 
+function AddonPicker(props) {
+  const { addonGroup, onAddonChange } = props;
+  const [pickedAddons, setPickedAddons] = useState({});
+  const isRequired = addonGroup.minQuantity === 1;
+  const pickOneOnly = addonGroup.maxQuantity === 1;
+  useEffect(() => {
+    if (isRequired && addonGroup.addons.length > 0) {
+      setPickedAddons({
+        [addonGroup.addons[0].id]: true
+      })
+    }
+  }, [])
+
+  useEffect(() => {
+    onAddonChange(Object.keys(pickedAddons).filter(addonId => pickedAddons[addonId]))
+  }, [pickedAddons])
+
+  const handleChange = (event) => {
+    if (pickOneOnly) {
+      setPickedAddons({ [event.target.value]: true })
+    } else {
+      setPickedAddons({ ...pickedAddons, [event.target.value]: event.target.checked })
+    }
+  }
+
+  const getAddonLabel = (addon) => `${addon.name} ${addon.price !== 0 ? `(+$${addon.price})` : ""}`
+
+  if (!pickOneOnly) {
+    return (
+      <FormControl fullWidth component="fieldset">
+        <FormLabel component="legend">{addonGroup.name}</FormLabel>
+        <FormGroup>
+          {addonGroup.addons.map((addon) => (
+            <FormControlLabel
+              control={
+                <Checkbox name={addon.id} onChange={handleChange} />
+              }
+              label={getAddonLabel(addon)}
+            />
+          ))}
+        </FormGroup>
+      </FormControl>
+    );
+  }
+  else {
+    return (
+      <FormControl component="fieldset">
+        <FormLabel component="legend">{addonGroup.name}</FormLabel>
+        <RadioGroup 
+          defaultValue={(isRequired && addonGroup.addons.length > 0 ) ? addonGroup.addons[0].id : ""}>
+          {addonGroup.addons.map((addon) => (
+            <FormControlLabel
+              control={<Radio/>}
+              onChange={handleChange}
+              value={addon.id}
+              label={getAddonLabel(addon)}
+            />
+          ))}
+        </RadioGroup>
+      </FormControl>
+    )
+  }
+}
+
 function FoodItemModal() {
   const modalOpen = useSelector(itemIsDisplayed);
   const item = useSelector(getDisplayedItem);
@@ -97,44 +163,31 @@ function FoodItemModal() {
   const dispatch = useDispatch();
   const [quantity, updateQuantity] = useState(1);
   const [specialInstruction, setSpecialInstruction] = useState("");
-  const [pickedAddons, setPickedAddons] = useState(addonGroups.reduce( 
-      (dict, group)=>{return {...dict,[group.id]: {} }}, {}));
+  const [pickedAddons, setPickedAddons] = useState({});
   useEffect(() => {
     setPickedAddons({});
   }, [item]);
 
   const handleOrder = () => {
-      const addons = Object.values(pickedAddons).reduce( (addonList, groupAddons)=> {
-        return  addonList.concat(Object.keys(groupAddons).filter(addonId => groupAddons[addonId]))
-      }, [] )
-   // const addons = Object.keys(pickedAddons).filter(
-    //  (addonId) => pickedAddons[addonId]
-  //  );
+    const addons = Object.values(pickedAddons).flat()
     dispatch(addOrder({ item, quantity, addons, specialInstruction }));
     dispatch(hideItem());
   };
 
-  const handleAddonCheck = (groupid) => (event) => {
+  const handleClose = () => dispatch(hideItem)
+
+  const handleAddonChange = (groupId) => (addons) => {
     setPickedAddons({
-      ...pickedAddons, 
-      [groupid]: {...pickedAddons[groupid],  [event.target.name]: event.target.checked }
-
-    });
-  };
-
-  const handleAddonSelect = (groupid) => (event) =>{
-    setPickedAddons({
-        ...pickedAddons,
-        [groupid]: {[event.target.value]: true}        
-      });
-
-  };
+      ...pickedAddons,
+      [groupId]: addons
+    })
+  }
 
   return (
     <MyModal
       BackdropProps={{ invisible: true }}
       open={modalOpen}
-      onClose={() => dispatch(hideItem())}
+      onClose={handleClose}
     >
       <MainContainer>
         <LeftContainer>
@@ -156,83 +209,32 @@ function FoodItemModal() {
                 </GridListTile>
               </GalleryList>
             </Grid>
+
             <Grid item xs={9}>
               <ImageContainer></ImageContainer>
             </Grid>
           </Grid>
         </LeftContainer>
+
         <RightContainer>
           <Typography variant="h4">{item && item.name}</Typography>
           <Typography variant="h5" gutterBottom>
             ${item && item.price}
           </Typography>
           <Box marginY="20px">
-            {addonGroups.map((group) =>  {
-            
-              if (group.maxQuantity==null)  {
-                return (
-                    <div>
-                    <FormControl fullWidth component="fieldset">
-                      <FormLabel component="legend">{group.name}</FormLabel>
-    
-                      {group.addons.map((addon) => (
-                        <div>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                name={addon.id}
-                                color="primary"
-                                onChange={handleAddonCheck(group.id)}
-                              />
-                            }
-                            label={`${addon.name} ${
-                              addon.price !== 0 ? `(+$${addon.price})` : ""
-                            }`}
-                          />
-                        </div>
-                      ))}
-                    </FormControl>
-                    </div>
-                  );
-              } 
-              else  {
-                  return(
-                      <Box marginY="30px">
-                    <FormControl    component="fieldset">
-                    <FormLabel component="legend">{group.name}</FormLabel>      
-                    <Select 
-                    onChange={handleAddonSelect(group.id)}
-                    on
-                    defaultValue={group.minQuantity == 0 ? "" : group.addons[0].id}>
-                        {group.minQuantity == 0 && <MenuItem value="">
-                            None
-                        </MenuItem>}
-                        
-                        {group.addons.map((addon) => (
-                            <MenuItem value={addon.id} > {addon.name}  </MenuItem>
+            {addonGroups.map((group) =>
+              <Box marginY="30px">
+                <AddonPicker addonGroup={group} onAddonChange={handleAddonChange(group.id)} />
+              </Box>
+            )}
 
-                        ))}
-                    </Select>
-                    </FormControl>
-                    </Box>
-
-                  )                  
-              }           
-              
-            })
-            
-            }
-
-            <FormControl component="fieldset">
-              <TextField
-                id="outlined-multiline-static"
-                label="Special instructions"
-                onChange={(event) => setSpecialInstruction(event.target.value)}
-                multiline
-                rows={2}
-                variant="outlined"
-              />
-            </FormControl>
+            <TextField
+              label="Special instructions"
+              onChange={(event) => setSpecialInstruction(event.target.value)}
+              multiline
+              rows={2}
+              variant="outlined"
+            />
           </Box>
 
           <Divider />
@@ -247,7 +249,7 @@ function FoodItemModal() {
               type="number"
               defaultValue={1}
               variant="outlined"
-              onChange={(event) => updateQuantity(event.target.value)}
+              onChange={(event) => updateQuantity(parseInt(event.target.value))}
             />
             <OrderButton
               variant="contained"

@@ -36,11 +36,11 @@ export const orderReducer = createSlice({
                 const orderKey = getHash([item.id, specialInstruction, ...(addons.concat().sort())].join());
                 return {
                     payload: {
-                        orderKey: orderKey,
+                        orderKey,
                         itemId: item.id,
                         addonIds: addons,
-                        quantity: quantity,
-                        specialInstruction: specialInstruction
+                        quantity,
+                        specialInstruction
                     }
                 }
             }
