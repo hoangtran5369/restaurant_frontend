@@ -8,7 +8,7 @@ import {
   
  
   const OrderContainer = styled.div`
-    width: 50%;
+    width: 40%;
     align-items: stretch;
     padding-left: 30px;
   `;

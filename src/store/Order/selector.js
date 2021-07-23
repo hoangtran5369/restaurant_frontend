@@ -1,5 +1,6 @@
 import {createSelector} from "@reduxjs/toolkit";
 import {getAllItemDict, getAllAddonDict} from 'store/FoodMenu/selector'
+import creditCardType from 'credit-card-type';
 
 export const orderSelector = state => state.order;
 
@@ -77,4 +78,30 @@ export const getTotal = createSelector(
 export const orderIsEmpty = createSelector(
     getOrderItems,
     (orderItem) => Object.keys(orderItem).length === 0 
+)
+
+export const getCustomerInfo = createSelector(
+    orderSelector,
+    (order) => order.customerInfo
+)
+
+export const getPaymentInfo = createSelector(
+    orderSelector,
+    (order) => order.paymentInfo
+)
+
+export const getCardInfo = createSelector(
+    getPaymentInfo,
+    (paymentInfo) => paymentInfo.cardInfo
+)
+
+export const getCreditCardText = createSelector(
+    getCardInfo,
+    (cardInfo) => {
+        const {cardNum, expiry} = cardInfo;
+        const cardMatches = creditCardType(cardNum.replace(/\s/g, ""));
+        const cardType = cardMatches.length > 0 ? cardMatches[0].niceType : "Credit card";
+        const secondaryText = cardMatches.length > 0 ? ` ending in ${cardNum.split(" ").pop()} (Exp. ${expiry})` : ""
+        return cardType + secondaryText;
+    }
 )

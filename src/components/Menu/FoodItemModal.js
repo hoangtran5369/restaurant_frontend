@@ -174,7 +174,7 @@ function FoodItemModal() {
     dispatch(hideItem());
   };
 
-  const handleClose = () => dispatch(hideItem)
+  const handleClose = () => dispatch(hideItem())
 
   const handleAddonChange = (groupId) => (addons) => {
     setPickedAddons({

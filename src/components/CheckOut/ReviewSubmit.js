@@ -5,6 +5,9 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 import OrderInfo from "components/CheckOut/OrderInfo";
+import { useSelector } from "react-redux";
+import { getCreditCardText, getCustomerInfo, getPaymentInfo } from "store/Order/selector";
+
 
 const MyContainer = styled.div`
   display: flex;
@@ -28,16 +31,20 @@ const SubmitButton = styled(Button)`
 
 
 function ReviewSubmit({ onFinished }) {
+  const customerInfo = useSelector(getCustomerInfo);
+  const paymentInfo = useSelector(getPaymentInfo);
+  const creditCardText = useSelector(getCreditCardText)
 
   return (
     <Box>
       <MyContainer>
         <FormContainer>
+          
           <p>Your details:</p>
           <p>
-            Your details: hoangtran5369@gmail.com <br/> 
-            Hoang Tran <br/> 
-            +14083415369  <br/> 
+            {customerInfo.email}  <br/> 
+            {`${customerInfo.firstname} ${customerInfo.surname}`} <br/> 
+            {customerInfo.phone}  <br/> 
             Order updates will be sent by text message
           </p>
           <p>Delivery option:  <br/> 
@@ -55,8 +62,8 @@ function ReviewSubmit({ onFinished }) {
 
           <br/> 
           <p>PAYMENT INFORMATION:   <br/> 
-                  MASTERCARD ending in 5333 (Exp. 5/2022)
-                  </p>
+                 {creditCardText}
+            </p>
           <p> 
               REVIEW & SUBMIT ORDER:  <br/> 
              

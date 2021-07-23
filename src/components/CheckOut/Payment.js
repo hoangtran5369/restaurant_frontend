@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -8,8 +8,13 @@ import {
   Radio,
   RadioGroup,
 } from "@material-ui/core";
+import { useForm, Controller } from "react-hook-form";
 import styled from "styled-components";
 import OrderInfo from "components/CheckOut/OrderInfo";
+import CreditCardInput from 'react-credit-card-input';
+import { useDispatch, useSelector } from "react-redux";
+import { getCardInfo } from "store/Order/selector";
+import { setCardInfo } from "store/Order/reducer";
 
 const MyContainer = styled.div`
   display: flex;
@@ -21,7 +26,7 @@ const MyContainer = styled.div`
 `;
 
 const FormContainer = styled.div`
-  width: 50%;
+  width: 60%;
   padding-right: 30px;
 `;
 
@@ -35,135 +40,115 @@ const MyText = styled.p`
   font-size: 14px;
 `;
 
+
+
+
 function Payment({ onFinished }) {
+  const cardInfo = useSelector(getCardInfo);
+  const dispatch = useDispatch();
+  const {  handleSubmit, control } = useForm({
+    defaultValues: cardInfo
+  })
   const [value, setValue] = React.useState("");
-  const [cardNumber, setCardNumber] = React.useState("");
-  const [expiredDate, setExpiredDate] = React.useState("");
-  const [cardCVV, setCVV] = React.useState("");
-  const [cardZipCode, setZipCode] = React.useState("");
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
-  const handleCardNumberChange = (event) => {
-    let parts = [];
-    const formatedString = event.target.value.replace(/\D/g, "").slice(0, 16);
+  const onSubmit = (data) => { 
+    dispatch(setCardInfo(data));
+    onFinished();
+  }
 
-    for (var i = 0, len = formatedString.length; i < len; i += 4) {
-      parts.push(formatedString.substring(i, i + 4));
-    }
-    setCardNumber(parts.join(" "));
-  };
-
-  const handleExpiredDateChange = (event) => {
-    let parts = [];
-    const formatedString = event.target.value.replace(/\D/g, "").slice(0, 4);
-
-    for (var i = 0, len = formatedString.length; i < len; i += 2) {
-      parts.push(formatedString.substring(i, i + 2));
-    }
-    setExpiredDate(parts.join("/"));
-  };
-  const handleCVVChange = (event) => {
-    setCVV(event.target.value.replace(/\D/g, "").slice(0, 3));
-  };
-
-  const handleZipCodeChange = (event) => {
-    setZipCode(event.target.value.replace(/\D/g, "").slice(0, 5));
-  };
 
   return (
     <Box>
-      <MyContainer>
-        <FormContainer>
-          <RadioGroup value={value} onChange={handleChange}>
-            <FormControlLabel
-              value="credit"
-              control={<Radio />}
-              label="Credit/Debit card"
-            />
-            <FormControlLabel
-              value="paypal"
-              control={<Radio />}
-              label="Paypal"
-            />
-            <FormControlLabel value="cash" control={<Radio />} label="Cash" />
-          </RadioGroup>
-          {value === "credit" && (
-            <Box>
-              <TextField
-                onChange={handleCardNumberChange}
-                value={cardNumber}
-                id="creditNumber"
-                label="Enter card number"
-                variant="outlined"
+      <form>
+        <MyContainer>
+          <FormContainer>
+
+            <RadioGroup value={value} onChange={handleChange}>
+              <FormControlLabel
+                value="credit"
+                control={<Radio />}
+                label="Credit/Debit card"
               />
-              <TextField
-                id="expiryDate"
-                onChange={handleExpiredDateChange}
-                value={expiredDate}
-                label="Expired date"
-                defaultValue="MM/YY"
-                variant="outlined"
+              <FormControlLabel
+                value="paypal"
+                control={<Radio />}
+                label="Paypal"
               />
-              <TextField
-                id="cvv"
-                onChange={handleCVVChange}
-                value={cardCVV}
-                label="CVV"
-                variant="outlined"
-              />
-              <TextField
-                id="zipCode"
-                onChange={handleZipCodeChange}
-                value={cardZipCode}
-                label="Zip Code"
-                variant="outlined"
-              />
-            </Box>
-          )}
-          {value === "paypal" && (
-            <Box>
-              <MyText>
-                You will be redirected to PayPal to authorize payment, once you
-                return you will be able to complete the order.
+              <FormControlLabel value="cash" control={<Radio />} label="Cash" />
+            </RadioGroup>
+            {value === "credit" && (
+              <Box>
+                <Controller
+                  control={control}
+                  name="cardNum"
+                  render={({ field: { onChange: onCardNumChange, value: cardNumValue } }) => {
+                    return (
+                      <Controller
+                        control={control}
+                        name="expiry"
+                        render={({ field: { onChange: onExpiryChange, value: expiryValue } }) => {
+                          return (
+                            <Controller
+                              control={control}
+                              name="cvc"
+                              render={({ field: { onChange: onCvcChange, value: cvcValue } }) => {
+                                return (
+                                  <CreditCardInput
+                                    cardNumberInputProps={{ value: cardNumValue, onChange: onCardNumChange }}
+                                    cardExpiryInputProps={{ value: expiryValue, onChange: onExpiryChange }}
+                                    cardCVCInputProps={{ value: cvcValue, onChange: onCvcChange }}
+                                  />
+                                )
+                              }}
+                            />
+                          )
+                        }}
+                      />
+                    )
+                  }}
+                />
+              
+              </Box>
+            )}
+            {value === "paypal" && (
+              <Box>
+                <MyText>
+                  You will be redirected to PayPal to authorize payment, once you
+                  return you will be able to complete the order.
               </MyText>
-            </Box>
-          )}
-          {value === "cash" && (
-            <Box>
-              <MyText>
-                Please make the payment at the counter / cashier to finish this
-                order!.
+              </Box>
+            )}
+            {value === "cash" && (
+              <Box>
+                <MyText>
+                  Please make the payment at the counter / cashier to finish this
+                  order!.
               </MyText>
-            </Box>
-          )}
-          <Divider ligth />
-          <br />
+              </Box>
+            )}
+            <Divider ligth />
+            <br />
           Coupon code:
           <Box>
-            <TextField
-              id="couponCode"
-              label="Enter the coupon code"
-              variant="outlined"
-            />
-          </Box>
-        </FormContainer>
+              <TextField
+                id="couponCode"
+                label="Enter the coupon code"
+                variant="outlined"
+              />
+            </Box>
+          </FormContainer>
 
-        <OrderInfo></OrderInfo>
-      </MyContainer>
+          <OrderInfo></OrderInfo>
+        </MyContainer>
 
-      <Divider variant="middle" />
-      <SubmitButton
-        onClick={onFinished}
-        color="primary"
-        fullWidth
-        variant="contained"
-      >
-        {" "}
-        Next{" "}
-      </SubmitButton>
+        <Divider variant="middle" />
+
+        <SubmitButton onClick={handleSubmit(onSubmit)} color="primary" fullWidth variant="contained"> Next   </SubmitButton>
+      </form>
     </Box>
   );
 }

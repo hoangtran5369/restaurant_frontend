@@ -16,6 +16,19 @@ function getHash(str) {
 export const orderReducer = createSlice({
     name: 'order',
     initialState: {
+        customerInfo: {
+            firstname: "",
+            surname: "",
+            email: "",
+            phone: ""
+        },
+        paymentInfo: {
+            cardInfo: {
+                cardNum: "",
+                expiry: "",
+                cvc: ""
+            }
+        },
         items: {},
         tipMultiplier: 0.1,
         taxMultiplier: 0.1,
@@ -57,7 +70,14 @@ export const orderReducer = createSlice({
         },
         setTip: (state, action) => {
             state.tipMultiplier = action.payload;
+        },
 
+        setCustomerInfo: (state, action) => {
+            state.customerInfo = action.payload
+        },
+
+        setCardInfo: (state, action) => {
+            state.paymentInfo.cardInfo = action.payload
         }
     },
 })
@@ -65,7 +85,7 @@ export const orderReducer = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const { addOrder, changeQuantity, removeOrderItem, setTip } = orderReducer.actions
+export const { addOrder, changeQuantity, removeOrderItem, setTip, setCustomerInfo, setCardInfo } = orderReducer.actions
 
 export default orderReducer.reducer
 
