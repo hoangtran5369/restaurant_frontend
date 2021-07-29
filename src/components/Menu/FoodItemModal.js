@@ -165,8 +165,10 @@ function FoodItemModal() {
   const [quantity, updateQuantity] = useState(1);
   const [specialInstruction, setSpecialInstruction] = useState("");
   const [pickedAddons, setPickedAddons] = useState({});
+
   useEffect(() => {
     setPickedAddons({});
+    setSpecialInstruction("");
   }, [item]);
 
   const handleOrder = () => {
