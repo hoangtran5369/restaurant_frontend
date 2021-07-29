@@ -4,10 +4,11 @@ import {
   Button,
 } from "@material-ui/core";
 import styled from "styled-components";
-import OrderInfo from "components/CheckOut/OrderInfo";
 import { useSelector } from "react-redux";
-import { getCreditCardText, getCustomerInfo, getPaymentInfo } from "store/Order/selector";
+import moment from "moment";
 
+import OrderInfo from "components/CheckOut/OrderInfo";
+import { getCreditCardText, getCustomerInfo, getPaymentInfo, getPickupTime } from "store/Order/selector";
 
 const MyContainer = styled.div`
   display: flex;
@@ -34,7 +35,7 @@ function ReviewSubmit({ onFinished }) {
   const customerInfo = useSelector(getCustomerInfo);
   const paymentInfo = useSelector(getPaymentInfo);
   const creditCardText = useSelector(getCreditCardText)
-
+  const pickupTimeStr = useSelector(getPickupTime);
   return (
     <Box>
       <MyContainer>
@@ -55,7 +56,7 @@ function ReviewSubmit({ onFinished }) {
                 San Jose, California 95122
                 United States <br/>  <br/> 
                 Your order will be ready <br/> 
-                Today after 12:25 PM <br/> 
+                {moment(pickupTimeStr).calendar()} <br/> 
                 Pickup instructions <br/> 
                 Customers pick up orders inside the restaurant. <br/> 
           </p>

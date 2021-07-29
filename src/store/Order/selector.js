@@ -17,6 +17,7 @@ export const getOrderItemInfo = createSelector(
             const {itemId, addonIds, quantity, specialInstruction} = order;
             const foundItem = itemDict[itemId];
             const foundAddons = addonIds.map(id => {
+                
                return {
                 id,
                 name: addonDict[id].name,
@@ -104,4 +105,14 @@ export const getCreditCardText = createSelector(
         const secondaryText = cardMatches.length > 0 ? ` ending in ${cardNum.split(" ").pop()} (Exp. ${expiry})` : ""
         return cardType + secondaryText;
     }
+)
+
+export const getPickupTime = createSelector(
+    orderSelector,
+    (order) => order.delivery.pickup.time
+)
+
+export const getPickupTimeOption = createSelector(
+    orderSelector,
+    (order) => order.delivery.pickup.option
 )

@@ -57,7 +57,7 @@ import {
 
 
   function CheckOut() {
-    const steps = ["1. Your infomation", "2. Delivery options", "3. Payments", "4. Review & Submit order"];
+    const steps = ["1. Your information", "2. Delivery options", "3. Payments", "4. Review & Submit order"];
   
   
   
@@ -87,7 +87,7 @@ import {
                 variant="fullWidth"
                 aria-label="full width tabs example"
               >
-                {steps.map(step => <StyledTab label={step} />)}
+                {steps.map((step, index) => <StyledTab disabled={index > currentStep}  label={step} />)}
               </StyledTabs>
               <CardContent>
               <TabPanel value={currentStep} index={0}>

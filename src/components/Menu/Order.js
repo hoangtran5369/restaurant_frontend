@@ -34,8 +34,8 @@ function OrderItem(props) {
     const handleQuantityChange = (event) => {
         if (event.target.value > 0 && event.target.value !== order.quantity) {
             dispatch(changeQuantity({
-                orderKey: order.orderKey, 
-                quantity: event.target.value 
+                orderKey: order.orderKey,
+                quantity: event.target.value
             }))
         }
     }
@@ -50,27 +50,31 @@ function OrderItem(props) {
             <div>
                 <ListItemText
                     primary={
-                        <Typography variant="h6" color="textPrimary">
+                        <Typography variant="body1" color="textPrimary">
                             {order.itemName} - ${totalPrice.toFixed(2)}
                         </Typography>
                     }
                     secondary={
-                        <React.Fragment>  
+                        <React.Fragment>
                             {order.addons.map(addon => (
                                 <Typography variant="body2" color="textSecondary">
-                                  -  {addon.name}
+                                    -  {addon.name}
                                 </Typography>
 
                             ))}
-                            <Typography variant="body2" color="textSecondary">
-                                  **  {order.specialInstruction}
+                            {order.specialInstruction && (
+                                <Typography variant="body2" color="textSecondary">
+                                    **  {order.specialInstruction}
                                 </Typography>
+                            )
+
+                            }
                         </React.Fragment>
                     }
 
                 />
 
-                <Box display={editable ? "flex" : "none" } alignItems="stretch" justifyContent="space-between" >
+                <Box display={editable ? "flex" : "none"} alignItems="stretch" justifyContent="space-between" >
 
                     <QuantityPicker type="number" variant="outlined" size="small" value={order.quantity} onChange={handleQuantityChange} />
                     <Button
@@ -87,7 +91,7 @@ function OrderItem(props) {
 
 function Order(props) {
     const orderItems = useSelector(getOrderItemInfo);
-    const {editable} = props
+    const { editable } = props
 
     return (
         <List dense>

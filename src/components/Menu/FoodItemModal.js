@@ -39,6 +39,7 @@ const MyModal = styled(Modal)`
 
 const MainContainer = styled.div`
   display: flex;
+  align-items:stretch;
   padding: 2rem;
   height: 100%;
   overflow: scroll;
@@ -113,7 +114,7 @@ function AddonPicker(props) {
     if (pickOneOnly) {
       setPickedAddons({ [event.target.value]: true })
     } else {
-      setPickedAddons({ ...pickedAddons, [event.target.value]: event.target.checked })
+      setPickedAddons({ ...pickedAddons, [event.target.name]: event.target.checked })
     }
   }
 
@@ -140,11 +141,11 @@ function AddonPicker(props) {
     return (
       <FormControl component="fieldset">
         <FormLabel component="legend">{addonGroup.name}</FormLabel>
-        <RadioGroup 
-          defaultValue={(isRequired && addonGroup.addons.length > 0 ) ? addonGroup.addons[0].id : ""}>
+        <RadioGroup
+          defaultValue={(isRequired && addonGroup.addons.length > 0) ? addonGroup.addons[0].id : ""}>
           {addonGroup.addons.map((addon) => (
             <FormControlLabel
-              control={<Radio/>}
+              control={<Radio />}
               onChange={handleChange}
               value={addon.id}
               label={getAddonLabel(addon)}
@@ -217,29 +218,26 @@ function FoodItemModal() {
         </LeftContainer>
 
         <RightContainer>
+
           <Typography variant="h4">{item && item.name}</Typography>
           <Typography variant="h5" gutterBottom>
             ${item && item.price}
           </Typography>
-          <Box marginY="20px">
-            {addonGroups.map((group) =>
-              <Box marginY="30px">
-                <AddonPicker addonGroup={group} onAddonChange={handleAddonChange(group.id)} />
-              </Box>
-            )}
+          {addonGroups.map((group) =>
+            <Box marginY="30px">
+              <AddonPicker addonGroup={group} onAddonChange={handleAddonChange(group.id)} />
+            </Box>
+          )}
 
-            <TextField
-              label="Special instructions"
-              onChange={(event) => setSpecialInstruction(event.target.value)}
-              multiline
-              rows={2}
-              variant="outlined"
-            />
-          </Box>
+          <TextField
+            label="Special instructions"
+            onChange={(event) => setSpecialInstruction(event.target.value)}
+            multiline
+            rows={2}
+            variant="outlined"
+          />
+          <Box marginY="20px" display="flex" alignItems="stretch">
 
-          <Divider />
-
-          <Box display="flex" alignContent="stretch" paddingTop="20px">
             <QuantityPicker
               label="Count"
               value={quantity}
@@ -258,7 +256,9 @@ function FoodItemModal() {
             >
               Add to cart
             </OrderButton>
-          </Box>
+              </Box>
+          <Box height="150px" />
+
         </RightContainer>
       </MainContainer>
     </MyModal>

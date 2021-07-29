@@ -46,18 +46,23 @@ const MyText = styled.p`
 function Payment({ onFinished }) {
   const cardInfo = useSelector(getCardInfo);
   const dispatch = useDispatch();
-  const {  handleSubmit, control } = useForm({
+  const {  handleSubmit, control, setError, clearErrors } = useForm({
     defaultValues: cardInfo
   })
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState("credit");
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
-  const onSubmit = (data) => { 
+  const onSubmit = (data) => {
     dispatch(setCardInfo(data));
     onFinished();
+  }
+
+  const clearErrorsBeforeChange = (changeHandler) => (e) => {
+    clearErrors();
+    changeHandler(e);
   }
 
 
@@ -85,22 +90,26 @@ function Payment({ onFinished }) {
                 <Controller
                   control={control}
                   name="cardNum"
+                  rules={{required: true}}
                   render={({ field: { onChange: onCardNumChange, value: cardNumValue } }) => {
                     return (
                       <Controller
                         control={control}
                         name="expiry"
+                        rules={{required: true}}
                         render={({ field: { onChange: onExpiryChange, value: expiryValue } }) => {
                           return (
                             <Controller
                               control={control}
                               name="cvc"
+                              rules={{required: true}}
                               render={({ field: { onChange: onCvcChange, value: cvcValue } }) => {
                                 return (
                                   <CreditCardInput
-                                    cardNumberInputProps={{ value: cardNumValue, onChange: onCardNumChange }}
-                                    cardExpiryInputProps={{ value: expiryValue, onChange: onExpiryChange }}
-                                    cardCVCInputProps={{ value: cvcValue, onChange: onCvcChange }}
+                                    onError={() => setError('cardNum')}
+                                    cardNumberInputProps={{ value: cardNumValue, onChange: clearErrorsBeforeChange(onCardNumChange) }}
+                                    cardExpiryInputProps={{ value: expiryValue, onChange: clearErrorsBeforeChange(onExpiryChange) }}
+                                    cardCVCInputProps={{ value: cvcValue, onChange: clearErrorsBeforeChange(onCvcChange)  }}
                                   />
                                 )
                               }}
@@ -130,7 +139,7 @@ function Payment({ onFinished }) {
               </MyText>
               </Box>
             )}
-            <Divider ligth />
+            <Divider />
             <br />
           Coupon code:
           <Box>

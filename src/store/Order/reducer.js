@@ -29,6 +29,12 @@ export const orderReducer = createSlice({
                 cvc: ""
             }
         },
+        delivery: {
+            pickup: {
+                time: "",
+                option: "now"
+            }
+        },
         items: {},
         tipMultiplier: 0.1,
         taxMultiplier: 0.1,
@@ -73,11 +79,19 @@ export const orderReducer = createSlice({
         },
 
         setCustomerInfo: (state, action) => {
-            state.customerInfo = action.payload
+            state.customerInfo = action.payload;
         },
 
         setCardInfo: (state, action) => {
-            state.paymentInfo.cardInfo = action.payload
+            state.paymentInfo.cardInfo = action.payload;
+        },
+
+        setPickupTime: (state, action) => {
+            state.delivery.pickup.time = action.payload;
+        },
+
+        setPickupTimeOption: (state, action) => {
+            state.delivery.pickup.option = action.payload;
         }
     },
 })
@@ -85,7 +99,7 @@ export const orderReducer = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const { addOrder, changeQuantity, removeOrderItem, setTip, setCustomerInfo, setCardInfo } = orderReducer.actions
+export const { addOrder, changeQuantity, removeOrderItem, setTip, setCustomerInfo, setCardInfo, setPickupTime, setPickupTimeOption } = orderReducer.actions
 
 export default orderReducer.reducer
 

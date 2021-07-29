@@ -17,6 +17,7 @@ import {
   getTotal,
   getTax,
   orderIsEmpty,
+  getTipMultiplier,
 } from "store/Order/selector";
 import { setTip } from "store/Order/reducer";
 import { useHistory } from "react-router-dom";
@@ -24,6 +25,7 @@ import { useHistory } from "react-router-dom";
 export function PriceDisplay() {
   const dispatch = useDispatch();
   const subtotal = useSelector(getSubtotal);
+  const tipMultiplier = useSelector(getTipMultiplier);
   const tipAmount = useSelector(getTip);
   const taxAmount = useSelector(getTax);
   const total = useSelector(getTotal);
@@ -42,7 +44,7 @@ export function PriceDisplay() {
           primary="Tip"
           secondary={
             <Select
-              defaultValue={0.1}
+              value={tipMultiplier}
               onChange={(event) => {
                 dispatch(setTip(event.target.value));
               }}

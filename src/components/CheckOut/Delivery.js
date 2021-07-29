@@ -9,10 +9,16 @@ import {
   InputLabel,
   Radio,
   RadioGroup,
+  TextField
 } from "@material-ui/core";
 import styled from "styled-components";
 import OrderInfo from "components/CheckOut/OrderInfo";
-import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { useEffect, useState } from "react";
+import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { setPickupTime, setPickupTimeOption } from "store/Order/reducer";
+import { getPickupTime, getPickupTimeOption } from "store/Order/selector";
 
 const MyContainer = styled.div`
   display: flex;
@@ -45,22 +51,50 @@ const MyText = styled.p`
 `;
 
 function Delivery({ onFinished }) {
-  const [deliveryOption, setDeliveryOption] = useState("");
-  const [pickUpTimeOption, setPickUpTimeOption] = useState("");
-  const hours = [
-    { label: "8:00 AM", value: 0 },
-    { label: "10:00 AM", value: 1 },
-    { label: "12:00 PM", value: 2 },
-    { label: "2:00 PM", value: 3 },
-  ];
-  const dates = [
-    { label: "Jun 21", value: 0 },
-    { label: "Jun 22", value: 1 },
-    { label: "Jun 23", value: 2 },
-    { label: "Jun 24", value: 3 },
-    { label: "Jun 25", value: 4 },
-    { label: "Jun 26", value: 5 },
-  ];
+  const dispatch = useDispatch();
+  const [deliveryOption, setDeliveryOption] = useState("Pickup");
+  const storePickupTimeOption = useSelector(getPickupTimeOption)
+  const [pickUpTimeOption, setFormPickUpTimeOption] = useState(storePickupTimeOption);
+  const storePickupTime = useSelector(getPickupTime)
+  const earliestTime = moment().add(30, 'minutes').format().slice(0,16)
+  const [pickupTime, setFormPickupTime] = useState(earliestTime)
+  const [pickupTimeError, setPickupTimeError] = useState("")
+  
+
+  const validatePickupTime = (pickupTime) => {
+    return moment(pickupTime).isAfter(moment(earliestTime).subtract(1, "minutes"), "minute")
+  }
+
+  const onSubmit = () => {
+    const pickupTimeIsValid = validatePickupTime(pickupTime);
+    if (pickupTimeIsValid) {
+      dispatch(setPickupTime(pickupTime));
+      onFinished();
+    }
+  }
+
+  useEffect(() => {
+    if (storePickupTime && validatePickupTime(storePickupTime)){
+      setFormPickupTime(storePickupTime)
+    }
+  }, [])
+
+  useEffect(() => {
+    const pickupTimeIsValid = validatePickupTime(pickupTime);
+    if (pickupTimeIsValid) {
+      setPickupTimeError("")
+    } else {
+      setPickupTimeError("Invalid Pickup Time")
+    }
+  }, [pickupTime])
+
+  useEffect(() => {
+    if(pickUpTimeOption === "now") {
+      setFormPickupTime(earliestTime)
+    }
+    dispatch(setPickupTimeOption(pickUpTimeOption))
+  }, [pickUpTimeOption])
+
   return (
     <Box>
       <MyContainer>
@@ -89,7 +123,7 @@ function Delivery({ onFinished }) {
               <RadioGroup
                 value={pickUpTimeOption}
                 onChange={(event) => {
-                  setPickUpTimeOption(event.target.value);
+                  setFormPickUpTimeOption(event.target.value);
                 }}
               >
                 <FormControlLabel
@@ -103,46 +137,28 @@ function Delivery({ onFinished }) {
                   label="Schedule for later"
                 />
               </RadioGroup>
-              {pickUpTimeOption === "now" && (
-                <Box>
-                  <MyText>Your order will be ready</MyText>
-                  <MyText>Today after 1:00 PM</MyText>
-                  <MyText>
-                    Customers pick up orders inside the restaurant.
-                  </MyText>
-                </Box>
-              )}
+              
               {pickUpTimeOption === "later" && (
                 <Box>
-                  <Select
-                    disableUnderline
-                    fullWidth
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={0}
-                    onChange={() => {}}
-                    label="Date"
-                  >
-                    {dates.map(({ label, value }) => {
-                      return <MenuItem value={value}> {label} </MenuItem>;
-                    })}
-                  </Select>
 
-                  <Select
-                    disableUnderline
-                    fullWidth
-                    labelId="demo-simple-select-outlined-label"
-                    id="demo-simple-select-outlined"
-                    value={0}
-                    onChange={() => {}}
-                    label="Date"
-                  >
-                    {hours.map(({ label, value }) => {
-                      return <MenuItem value={value}> {label} </MenuItem>;
-                    })}
-                  </Select>
+                  <TextField
+                    label="Pickup time"
+                    type="datetime-local"
+                    error={pickupTimeError !==  ""}
+                    helperText={pickupTimeError !==  "" && "Invalid pickup time"}
+                    value={pickupTime}
+                    onChange={(event) => setFormPickupTime(event.target.value)}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+    
+                </Box>
+              )}
+               {(pickUpTimeOption === "now" || pickUpTimeOption === "later")&& (
+                <Box>
                   <MyText>Your order will be ready</MyText>
-                  <MyText>Today after 2:00 PM</MyText>
+                  <MyText>{moment(pickupTime).calendar()}</MyText>
                   <MyText>
                     Customers pick up orders inside the restaurant.
                   </MyText>
@@ -150,6 +166,7 @@ function Delivery({ onFinished }) {
               )}
             </Box>
           )}
+          
           {["Doordash", "Grubhub", "Ubereats"].includes(deliveryOption) && (
             <Box>
               <MyText>
@@ -158,7 +175,7 @@ function Delivery({ onFinished }) {
               </MyText>
             </Box>
           )}
-        
+
         </FormContainer>
 
         <OrderInfo></OrderInfo>
@@ -166,7 +183,7 @@ function Delivery({ onFinished }) {
 
       <Divider variant="middle" />
       <SubmitButton
-        onClick={onFinished}
+        onClick={onSubmit}
         color="primary"
         fullWidth
         variant="contained"
