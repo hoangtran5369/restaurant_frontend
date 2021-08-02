@@ -8,8 +8,13 @@ export const getUser = createSelector(
     (auth) => auth.user
 );
 
+export const getUserName = createSelector(
+    getUser, 
+    (user) => user
+);
+
 export const userLoggedIn = createSelector(
-    getUser,
-    (user) => (user.id !== "")
+    authSelector, 
+    auth => auth.authState === "signedin"
 )
 

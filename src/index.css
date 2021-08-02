@@ -15,3 +15,9 @@ code {
 a {
   text-decoration: none;
 }
+
+:root {
+  --amplify-primary-color: rgb(42, 65, 44);
+  --amplify-primary-tint: #020101;
+  --amplify-primary-shade: rgb(79, 114, 82);
+}

@@ -3,11 +3,13 @@ import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import { Typography, Menu, MenuItem } from "@material-ui/core";
-import { userLoggedIn } from "../store/auth/selector";
 import { useSelector, useDispatch } from 'react-redux'
 import React from "react";
-import { logOut } from "../store/auth/reducer";
+import { AmplifySignOut } from '@aws-amplify/ui-react';
+
 import styled from "styled-components";
+import { logOut } from "../store/auth/reducer";
+import { userLoggedIn, getUserName } from "../store/auth/selector";
 
 const StyledAppBar = styled(AppBar)`
     background-color: rgb(42, 65, 44);
@@ -21,6 +23,7 @@ const Title = styled(Typography)`
 const MenuGroup = styled.div`
     flex-grow: 1;
 ` 
+
 
 const MorePopup = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -57,21 +60,23 @@ const MorePopup = () => {
 function Navbar() {
     const history = useHistory();
     const userIsLoggedIn = useSelector(userLoggedIn);
+    const username = useSelector(getUserName);
     let userSection;
     const dispatch = useDispatch();
     if (!userIsLoggedIn) {
         userSection = (
             <React.Fragment>
-                <Button color="inherit" onClick={() => history.push('/login')}><h3>Login</h3></Button>
-                <Button color="inherit" onClick={() => history.push('/register')}><h3>Register</h3></Button>
+                <Button color="inherit" onClick={() => history.push('/register')}><h3>Login / Register</h3></Button>
 
             </React.Fragment>
         )
     } else {
         userSection = (
             <React.Fragment>
-                <Button color="inherit" onClick={() => { }}><h3>Hello, User!</h3></Button>
-                <Button color="inherit" onClick={() => dispatch(logOut())}><h3>Log out</h3></Button>
+                <Button color="inherit" onClick={() => { }}><h3>Hello, {username}!</h3></Button>
+
+                <AmplifySignOut />
+
             </React.Fragment>
         )
     }

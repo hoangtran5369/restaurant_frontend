@@ -1,9 +1,16 @@
 import { Button, Card, CardContent, Box, TextField, Typography } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { useEffect } from 'react';
+import { Link, Redirect, useHistory } from "react-router-dom";
 import Navbar from "./Navbar";
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { AmplifyAuthenticator, AmplifySignUp, AmplifySignOut } from '@aws-amplify/ui-react';
+import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
+
 
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { logIn, logOut } from "store/auth/reducer";
+import { userLoggedIn } from "store/auth/selector";
 
 
 const InputField = styled(TextField)`
@@ -20,31 +27,23 @@ const SignupPrompt = styled.p`
     margin: 0.5rem 0;
 `
 function Register() {
-    const { handleSubmit, register } = useForm();
-    const onSubmit = handleSubmit((data) => {
-        console.log(data)
-    });
+    const userIsLoggedIn = useSelector(userLoggedIn);
+    
+    if (userIsLoggedIn) {
+        return <Redirect to="/" />
+    }
 
     return (
         <Box minHeight="100vh" flexDirection="column" display="flex">
             <Navbar />
+
             <Box flexGrow={1} display="flex" justifyContent="space-around" alignItems="center">
                 <Box minWidth="300px" maxWidth="400px">
-                <Card>
-                    <CardContent>
-                        <form onSubmit={onSubmit}>
-                            <Typography variant="h5" component="h2" gutterBottom>Register</Typography>
-                            <InputField {...register('email')} fullWidth label="Email" name="email" size="small" variant="outlined" />
-                            <InputField {...register('password')} fullWidth label="Password" name="password" size="small" type="password" variant="outlined" />
-                            <InputField {...register('password')} fullWidth label="Confirm Password" name="confirm" size="small" type="password" variant="outlined" />
-                            <Box display="flex" flexDirection="row-reverse">
-                                <LoginButton color="primary" fullWidth type="submit" variant="contained">Register</LoginButton>
-                            </Box>
-
-                            <SignupPrompt>Already have an account? <Link to="/register">Log in</Link></SignupPrompt>
-                        </form>
-                    </CardContent>
-                </Card>
+                    <AmplifyAuthenticator>
+                        <AmplifySignUp
+                            slot="sign-up"
+                        />
+                    </AmplifyAuthenticator>
                 </Box>
             </Box>
         </Box>

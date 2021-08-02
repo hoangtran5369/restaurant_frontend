@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "restaurantsitea492663d": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
