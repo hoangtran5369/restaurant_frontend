@@ -1,10 +1,19 @@
 {
   "auth": {
-    "restaurantsitea492663d": {
+    "restaurantsite342d6518": {
       "service": "Cognito",
+      "serviceType": "imported",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false
+    }
+  },
+  "storage": {
+    "restaurantsite20eb42ac": {
+      "service": "S3",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
     }
   }
 }

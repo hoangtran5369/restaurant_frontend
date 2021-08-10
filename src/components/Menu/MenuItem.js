@@ -2,6 +2,8 @@ import { Box, Typography, ListItem } from '@material-ui/core';
 import styled from "styled-components";
 import { useDispatch } from 'react-redux';
 import {displayItem} from 'store/FoodMenu/reducer';
+import {Storage} from 'aws-amplify';
+import { useEffect, useState } from 'react';
 
 const MenuItemContainer = styled(ListItem)`
     height: 200px;
@@ -20,7 +22,17 @@ const MenuItemImage = styled.img`
     border-radius: 0.5rem;
 `
 
+function AWSImage(props) {
+    const {src} = props;
+    const [imgUrl, setImgUrl] = useState("")
+    useEffect(() => {
+        console.log("SRC: ", src);
+        Storage.get(src).then(url => setImgUrl(url))
+    }, [src])
 
+    return <MenuItemImage src={imgUrl} alt="" />
+    
+}
 
 function MenuItem(props) {
     const {item} = props;
@@ -51,7 +63,7 @@ function MenuItem(props) {
             </Box>
             
             <Box>
-                <MenuItemImage src={item.imageUrl} alt="" />
+                <AWSImage src={item.imageUrl} alt="" />
             </Box>
         </MenuItemContainer>
 
