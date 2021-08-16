@@ -8,7 +8,6 @@ import React from "react";
 import { AmplifySignOut } from '@aws-amplify/ui-react';
 
 import styled from "styled-components";
-import { logOut } from "../store/auth/reducer";
 import { userLoggedIn, getUserName } from "../store/auth/selector";
 
 const StyledAppBar = styled(AppBar)`
@@ -62,11 +61,10 @@ function Navbar() {
     const userIsLoggedIn = useSelector(userLoggedIn);
     const username = useSelector(getUserName);
     let userSection;
-    const dispatch = useDispatch();
     if (!userIsLoggedIn) {
         userSection = (
             <React.Fragment>
-                <Button color="inherit" onClick={() => history.push('/register')}><h3>Login / Register</h3></Button>
+                <Button color="inherit" onClick={() => history.push('/login')}><h3>Login / Register</h3></Button>
 
             </React.Fragment>
         )
