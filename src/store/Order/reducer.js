@@ -1,4 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import {getOrderData, getPaymentInfo} from "store/Order/selector"
+import orderApi from 'store/Order/api';
 
 
 function getHash(str) {
@@ -11,6 +13,26 @@ function getHash(str) {
     }
     return hash;
   };
+
+  export const processOrderPayment = createAsyncThunk(
+      'order/processPayment', async (_ , {getState}) => {
+          console.log("PROCESSSING PAYMENT")
+          console.log(getPaymentInfo(getState()))
+          return "123456"
+      }
+  )
+
+  export const submitOrder = createAsyncThunk(
+    'order/submitOrder', async ( _, {dispatch, getState}) => {
+        console.log("ORDER SUBMITTED")
+        const paymentToken = await dispatch(processOrderPayment()).then(result => result.payload)
+        console.log("PAYMENT TOKEN", paymentToken)
+        const orderData = getOrderData(getState())
+        orderData.paymentToken = paymentToken
+        orderApi.postOrder(orderData).then(result => console.log(result))
+
+    }
+  )
   
 
 export const orderReducer = createSlice({

@@ -9,6 +9,7 @@ import CheckOut from "components/CheckOut/CheckOut";
 import Promotions from "components/Promotions";
 import Menu from "components/Menu/Menu";
 import Reservation from "components/Reservation/Reservation";
+import Complete from "components/CheckOut/Complete";
 
 
 
@@ -18,6 +19,7 @@ const AppRoutes = () => {
         { path: "/", component: Home, exact:true },
         { path: "/login", component: AuthPage, exact:true },
         { path: "/checkout", component: CheckOut, exact:true },
+        { path: "/checkout/complete", component: Complete, exact: true},
         { path: "/menu", component: Menu, exact:true },
         {path: "/reservation", component: Reservation, exact:true },
         {path: "/Promotions", component: Promotions, exact:true },

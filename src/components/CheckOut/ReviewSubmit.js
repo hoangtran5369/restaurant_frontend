@@ -4,11 +4,12 @@ import {
   Button,
 } from "@material-ui/core";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 
 import OrderInfo from "components/CheckOut/OrderInfo";
 import { getCreditCardText, getCustomerInfo, getPaymentInfo, getPickupTime } from "store/Order/selector";
+import { submitOrder } from "store/Order/reducer";
 
 const MyContainer = styled.div`
   display: flex;
@@ -32,10 +33,19 @@ const SubmitButton = styled(Button)`
 
 
 function ReviewSubmit({ onFinished }) {
+  const dispatch = useDispatch();
   const customerInfo = useSelector(getCustomerInfo);
   const paymentInfo = useSelector(getPaymentInfo);
   const creditCardText = useSelector(getCreditCardText)
   const pickupTimeStr = useSelector(getPickupTime);
+
+  const onSubmitClicked = () => {
+    dispatch(submitOrder())
+    if (onFinished) {
+      onFinished()
+    }
+  }
+
   return (
     <Box>
       <MyContainer>
@@ -75,7 +85,7 @@ function ReviewSubmit({ onFinished }) {
       </MyContainer>
 
       <SubmitButton
-        onClick={onFinished}
+        onClick={onSubmitClicked}
         color="primary"
         fullWidth
         variant="contained"

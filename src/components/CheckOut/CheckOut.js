@@ -14,6 +14,7 @@ import {
   import Payments from "components/CheckOut/Payment";
   import ReviewSubmit from "components/CheckOut/ReviewSubmit";
   import { useState } from "react";
+import { useHistory } from "react-router";
   
   
   const StyledCard = styled(Card)`
@@ -57,9 +58,10 @@ import {
 
 
   function CheckOut() {
+    const history = useHistory();
     const steps = ["1. Your information", "2. Delivery options", "3. Payments", "4. Review & Submit order"];
   
-  
+    
   
     const [currentStep, setCurrentStep] = useState(0);
   
@@ -100,7 +102,7 @@ import {
                     <Payments onFinished={()=>setCurrentStep(3)} />
               </TabPanel>
               <TabPanel value={currentStep} index={3}>
-                    <ReviewSubmit />
+                    <ReviewSubmit  />
               </TabPanel>
                
               </CardContent>

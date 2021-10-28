@@ -13,7 +13,7 @@ export const getOrderItems = createSelector(
 export const getOrderItemInfo = createSelector(
     getOrderItems, getAllItemDict, getAllAddonDict,
     (orderDict, itemDict, addonDict) => {
-        const result = Object.entries(orderDict).map(([orderKey, order]) => {
+        return Object.entries(orderDict).map(([orderKey, order]) => {
             const {itemId, addonIds, quantity, specialInstruction} = order;
             const foundItem = itemDict[itemId];
             const foundAddons = addonIds.map(id => {
@@ -35,7 +35,6 @@ export const getOrderItemInfo = createSelector(
                 specialInstruction
             }
         })
-        return result;
     }
 )
 
@@ -106,6 +105,10 @@ export const getCreditCardText = createSelector(
         return cardType + secondaryText;
     }
 )
+export const getDeliveryInfo = createSelector(
+    orderSelector,
+    (order) => order.delivery
+)
 
 export const getPickupTime = createSelector(
     orderSelector,
@@ -115,4 +118,48 @@ export const getPickupTime = createSelector(
 export const getPickupTimeOption = createSelector(
     orderSelector,
     (order) => order.delivery.pickup.option
+)
+
+
+export const getOrderData = createSelector(
+    getCustomerInfo,
+    getOrderItemInfo,
+    getTipMultiplier,
+    getTaxMultiplier,
+    getDeliveryInfo,
+    getPaymentInfo,
+    (customerInfo, orderItemInfo, tipMultiplier, taxMultiplier, deliveryInfo) => {
+        const orderItems = orderItemInfo.map(itemInfo => {
+            return {
+                menuItemId: itemInfo.itemId,
+                addOns: itemInfo.addons.map(addonInfo => addonInfo.id),
+                quantity: itemInfo.quantity,
+                specialInstruction: itemInfo.specialInstruction
+            }
+        })
+        const customer = {
+            firstName: customerInfo.firstname,
+            email: customerInfo.email,
+            phone: customerInfo.phone,
+            lastName: customerInfo.surname,
+        }
+        const delivery = {
+            deliveryFee: 0,
+            info: {
+                deliveryType: 'pickup',
+                time: deliveryInfo.pickup.time,
+                merchantId: '604b3fe8-f221-4ef1-bed2-505ac0d5b891'
+            }
+        }
+
+        return {
+            customer,
+            delivery,
+            items: orderItems,
+            tipMultiplier,
+            taxMultiplier,
+            promoCode: ""
+        }
+    }
+
 )
