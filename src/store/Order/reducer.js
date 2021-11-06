@@ -14,22 +14,22 @@ function getHash(str) {
     return hash;
   };
 
-  export const processOrderPayment = createAsyncThunk(
-      'order/processPayment', async (_ , {getState}) => {
-          console.log("PROCESSSING PAYMENT")
-          console.log(getPaymentInfo(getState()))
-          return "123456"
-      }
+  export const getMerchant = createAsyncThunk(
+    'order/getMerchant', async () => {  
+        const result = await orderApi.getMerchant()
+        return result
+
+    }
   )
+  
+   
 
   export const submitOrder = createAsyncThunk(
     'order/submitOrder', async ( _, {dispatch, getState}) => {
-        console.log("ORDER SUBMITTED")
-        const paymentToken = await dispatch(processOrderPayment()).then(result => result.payload)
-        console.log("PAYMENT TOKEN", paymentToken)
         const orderData = getOrderData(getState())
-        orderData.paymentToken = paymentToken
-        orderApi.postOrder(orderData).then(result => console.log(result))
+        // console.log(JSON.stringify(orderData,null,2))
+        const result = await orderApi.postOrder(orderData)
+        return result
 
     }
   )
@@ -45,21 +45,24 @@ export const orderReducer = createSlice({
             phone: ""
         },
         paymentInfo: {
+            clientSecret: "",
             cardInfo: {
-                cardNum: "",
-                expiry: "",
-                cvc: ""
+                // cardNum: "",
+                // expiry: "",
+                // cvc: ""
             }
         },
         delivery: {
             pickup: {
                 time: "",
                 option: "now"
-            }
+            },
+            merchantId: ""
         },
         items: {},
         tipMultiplier: 0.1,
         taxMultiplier: 0.1,
+
     },
     reducers: {
         addOrder: {
@@ -107,21 +110,33 @@ export const orderReducer = createSlice({
         setCardInfo: (state, action) => {
             state.paymentInfo.cardInfo = action.payload;
         },
+        setClientSecret:(state, action) => {
+            state.paymentInfo.clientSecret=action.payload;
+        },
 
         setPickupTime: (state, action) => {
+            
             state.delivery.pickup.time = action.payload;
         },
 
         setPickupTimeOption: (state, action) => {
             state.delivery.pickup.option = action.payload;
         }
+        
     },
+    extraReducers: (builder) => {
+        builder.addCase(getMerchant.fulfilled, (state, action ) => {
+        //   state.loading = true;
+        state.delivery.merchantId =  action.payload.id;
+        });      
+      }
 })
 
 
 
+
 // Action creators are generated for each case reducer function
-export const { addOrder, changeQuantity, removeOrderItem, setTip, setCustomerInfo, setCardInfo, setPickupTime, setPickupTimeOption } = orderReducer.actions
+export const { addOrder, changeQuantity, removeOrderItem, setTip, setCustomerInfo, setCardInfo, setClientSecret, setPickupTime, setPickupTimeOption } = orderReducer.actions
 
 export default orderReducer.reducer
 

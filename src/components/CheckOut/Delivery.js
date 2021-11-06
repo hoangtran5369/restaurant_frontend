@@ -19,6 +19,7 @@ import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { setPickupTime, setPickupTimeOption } from "store/Order/reducer";
 import { getPickupTime, getPickupTimeOption } from "store/Order/selector";
+import { getMerchant } from "store/Order/reducer";
 
 const MyContainer = styled.div`
   display: flex;
@@ -60,7 +61,8 @@ function Delivery({ onFinished }) {
   const [pickupTime, setFormPickupTime] = useState(earliestTime)
   const [pickupTimeError, setPickupTimeError] = useState("")
   
-
+  useEffect( () => {
+    dispatch(getMerchant()) }, []  ) 
   const validatePickupTime = (pickupTime) => {
     return moment(pickupTime).isAfter(moment(earliestTime).subtract(1, "minutes"), "minute")
   }

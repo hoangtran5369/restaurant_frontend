@@ -14,9 +14,16 @@ import {
   import Payments from "components/CheckOut/Payment";
   import ReviewSubmit from "components/CheckOut/ReviewSubmit";
   import { useState } from "react";
-import { useHistory } from "react-router";
-  
-  
+  import { useHistory } from "react-router";
+  import { Elements } from "@stripe/react-stripe-js"; 
+import { loadStripe } from "@stripe/stripe-js";
+
+
+  const stripePromise = loadStripe(
+  "pk_test_51Jno9iJtWODUig1GQTrVSLriYSeOdgTh1wrAxt8suv95JuJu1LUDCjpv3Lp6kpWZlAP2dW2NPBPi8MemvYxzhG8J00sVV0Dwcj"
+);
+ 
+
   const StyledCard = styled(Card)`
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   
@@ -59,7 +66,7 @@ import { useHistory } from "react-router";
 
   function CheckOut() {
     const history = useHistory();
-    const steps = ["1. Your information", "2. Delivery options", "3. Payments", "4. Review & Submit order"];
+    const steps = ["1. Your information", "2. Delivery options", "3. Confirm Infomation", "4. Payment"];
   
     
   
@@ -92,6 +99,8 @@ import { useHistory } from "react-router";
                 {steps.map((step, index) => <StyledTab disabled={index > currentStep}  label={step} />)}
               </StyledTabs>
               <CardContent>
+              <Elements stripe={stripePromise} >             
+             
               <TabPanel value={currentStep} index={0}>
                     <CustomerInfo onFinished={()=> setCurrentStep(1)}/>
               </TabPanel>
@@ -99,12 +108,14 @@ import { useHistory } from "react-router";
                     <Delivery onFinished={()=>setCurrentStep(2)}/>
               </TabPanel>
               <TabPanel value={currentStep} index={2}>
-                    <Payments onFinished={()=>setCurrentStep(3)} />
+                   <ReviewSubmit onFinished={()=>setCurrentStep(3) }/>
               </TabPanel>
               <TabPanel value={currentStep} index={3}>
-                    <ReviewSubmit  />
+                  <Payments />
+                   
               </TabPanel>
                
+              </Elements> 
               </CardContent>
             </StyledCard>
           </Box>

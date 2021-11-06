@@ -8,8 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 
 import OrderInfo from "components/CheckOut/OrderInfo";
-import { getCreditCardText, getCustomerInfo, getPaymentInfo, getPickupTime } from "store/Order/selector";
+import { getCardInfo, getClientSecret, getCreditCardText, getCustomerInfo, getPaymentInfo, getPickupTime } from "store/Order/selector";
 import { submitOrder } from "store/Order/reducer";
+import { StripeCardElementChangeEvent, StripeError } from "@stripe/stripe-js";
+import { useStripe } from "@stripe/react-stripe-js";
 
 const MyContainer = styled.div`
   display: flex;
@@ -34,13 +36,34 @@ const SubmitButton = styled(Button)`
 
 function ReviewSubmit({ onFinished }) {
   const dispatch = useDispatch();
+  const stripe = useStripe();
+   
   const customerInfo = useSelector(getCustomerInfo);
   const paymentInfo = useSelector(getPaymentInfo);
-  const creditCardText = useSelector(getCreditCardText)
+  const creditCardText = "" // useSelector(getCreditCardText)
   const pickupTimeStr = useSelector(getPickupTime);
 
-  const onSubmitClicked = () => {
-    dispatch(submitOrder())
+  const cardElement = useSelector(getCardInfo);
+  const clientSecret = useSelector(getClientSecret);
+
+  const onSubmitClicked = async () => {
+ 
+    
+//  if (cardElement) {
+//     const payload = await stripe.confirmCardPayment(clientSecret, {
+//         payment_method: {
+//           card: cardElement,
+//         },
+//       });
+//       if (payload.error) {    
+//         console.log("Error", payload.error);
+//       } else {
+//         console.log("Success", payload);
+        
+        
+//       }
+//     }
+    // dispatch(submitOrder())
     if (onFinished) {
       onFinished()
     }
@@ -48,6 +71,7 @@ function ReviewSubmit({ onFinished }) {
 
   return (
     <Box>
+      <h1>{clientSecret}</h1>
       <MyContainer>
         <FormContainer>
           

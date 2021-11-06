@@ -95,6 +95,11 @@ export const getCardInfo = createSelector(
     (paymentInfo) => paymentInfo.cardInfo
 )
 
+export const getClientSecret = createSelector(
+    getPaymentInfo,
+    (paymentInfo) => paymentInfo.clientSecret
+)
+
 export const getCreditCardText = createSelector(
     getCardInfo,
     (cardInfo) => {
@@ -148,7 +153,7 @@ export const getOrderData = createSelector(
             info: {
                 deliveryType: 'pickup',
                 time: deliveryInfo.pickup.time,
-                merchantId: '604b3fe8-f221-4ef1-bed2-505ac0d5b891'
+                merchantId:  deliveryInfo.merchantId,
             }
         }
 

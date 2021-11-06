@@ -13,8 +13,15 @@ import styled from "styled-components";
 import OrderInfo from "components/CheckOut/OrderInfo";
 import CreditCardInput from 'react-credit-card-input';
 import { useDispatch, useSelector } from "react-redux";
-import { getCardInfo } from "store/Order/selector";
-import { setCardInfo } from "store/Order/reducer";
+import { getCardInfo, getSubtotal, getTotal } from "store/Order/selector";
+import { setCardInfo, setClientSecret, submitOrder } from "store/Order/reducer";
+import {paymentIntent} from "store/Order/api"
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import CardField from "components/CheckOut/CardField";
+import { StripeCardElementChangeEvent, StripeError } from "@stripe/stripe-js";
+import { ConsoleLogger } from "@aws-amplify/core";
+import { useState } from "react";
+
 
 const MyContainer = styled.div`
   display: flex;
@@ -40,24 +47,45 @@ const MyText = styled.p`
   font-size: 14px;
 `;
 
-
-
-
 function Payment({ onFinished }) {
+  const stripe = useStripe();
+  const element = useElements();
+  const [clientSecret, setClientSecret] = useState("");
   const cardInfo = useSelector(getCardInfo);
+  const paymentAmount = useSelector(getTotal)
   const dispatch = useDispatch();
   const {  handleSubmit, control, setError, clearErrors } = useForm({
     defaultValues: cardInfo
   })
   const [value, setValue] = React.useState("credit");
-
+   useEffect (() => { 
+      dispatch(submitOrder()).then(result => setClientSecret(result.payload.payment.clientSecret))    
+      // paymentIntent(paymentAmount).then(result =>  setClientSecret(result["clientSecret"]))             
+      }, []);
+    
   const handleChange = (event) => {
     setValue(event.target.value);
   };
 
-  const onSubmit = (data) => {
-    dispatch(setCardInfo(data));
-    onFinished();
+  const onSubmit = async (data) => {
+
+    const cardElement = element.getElement(CardElement);
+    console.log(cardElement);
+    if (cardElement) {
+      const payload = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: cardElement,
+          },
+        });
+        if (payload.error) {    
+          console.log("Error", payload.error);
+        } else {
+          console.log("Success", payload);         
+          
+        }
+      }
+   
+    // onFinished();
   }
 
   const clearErrorsBeforeChange = (changeHandler) => (e) => {
@@ -66,8 +94,9 @@ function Payment({ onFinished }) {
   }
 
 
+
   return (
-    <Box>
+    <Box>    
       <form>
         <MyContainer>
           <FormContainer>
@@ -86,42 +115,7 @@ function Payment({ onFinished }) {
               <FormControlLabel value="cash" control={<Radio />} label="Cash" />
             </RadioGroup>
             {value === "credit" && (
-              <Box>
-                <Controller
-                  control={control}
-                  name="cardNum"
-                  rules={{required: true}}
-                  render={({ field: { onChange: onCardNumChange, value: cardNumValue } }) => {
-                    return (
-                      <Controller
-                        control={control}
-                        name="expiry"
-                        rules={{required: true}}
-                        render={({ field: { onChange: onExpiryChange, value: expiryValue } }) => {
-                          return (
-                            <Controller
-                              control={control}
-                              name="cvc"
-                              rules={{required: true}}
-                              render={({ field: { onChange: onCvcChange, value: cvcValue } }) => {
-                                return (
-                                  <CreditCardInput
-                                    onError={() => setError('cardNum')}
-                                    cardNumberInputProps={{ value: cardNumValue, onChange: clearErrorsBeforeChange(onCardNumChange) }}
-                                    cardExpiryInputProps={{ value: expiryValue, onChange: clearErrorsBeforeChange(onExpiryChange) }}
-                                    cardCVCInputProps={{ value: cvcValue, onChange: clearErrorsBeforeChange(onCvcChange)  }}
-                                  />
-                                )
-                              }}
-                            />
-                          )
-                        }}
-                      />
-                    )
-                  }}
-                />
-              
-              </Box>
+              <CardField />               
             )}
             {value === "paypal" && (
               <Box>
@@ -156,7 +150,7 @@ function Payment({ onFinished }) {
 
         <Divider variant="middle" />
 
-        <SubmitButton onClick={handleSubmit(onSubmit)} color="primary" fullWidth variant="contained"> Next   </SubmitButton>
+        <SubmitButton onClick={handleSubmit(onSubmit)} color="primary" fullWidth variant="contained"> Confirm Payment   </SubmitButton>
       </form>
     </Box>
   );
