@@ -10,6 +10,16 @@ export const getOrderItems = createSelector(
     (order) => order.items
 );
 
+export const getOrderId = createSelector(
+    orderSelector, 
+    (order) => order.id
+);
+
+export const getReceiptUrl = createSelector(
+    orderSelector, 
+    (order) => order.receiptUrl
+);
+
 export const getOrderItemInfo = createSelector(
     getOrderItems, getAllItemDict, getAllAddonDict,
     (orderDict, itemDict, addonDict) => {

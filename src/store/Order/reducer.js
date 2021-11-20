@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import {getOrderData, getPaymentInfo} from "store/Order/selector"
+import { getOrderData, getOrderId, getPaymentInfo } from "store/Order/selector"
 import orderApi from 'store/Order/api';
 
 
@@ -7,33 +7,52 @@ function getHash(str) {
     var hash = 0, i, chr;
     if (str.length === 0) return hash;
     for (i = 0; i < str.length; i++) {
-      chr   = str.charCodeAt(i);
-      hash  = ((hash << 5) - hash) + chr;
-      hash |= 0; 
+        chr = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0;
     }
     return hash;
-  };
+};
 
-  export const getMerchant = createAsyncThunk(
-    'order/getMerchant', async () => {  
+export const getMerchant = createAsyncThunk(
+    'order/getMerchant', async () => {
         const result = await orderApi.getMerchant()
         return result
 
     }
-  )
-  
-   
+)
 
-  export const submitOrder = createAsyncThunk(
-    'order/submitOrder', async ( _, {dispatch, getState}) => {
+
+
+export const submitOrder = createAsyncThunk(
+    'order/submitOrder', async (_, { dispatch, getState }) => {
         const orderData = getOrderData(getState())
-        // console.log(JSON.stringify(orderData,null,2))
         const result = await orderApi.postOrder(orderData)
         return result
 
     }
-  )
-  
+)
+
+
+export const fetchReceiptUrl = createAsyncThunk(
+    'order/getReceiptUrl', async (_, { dispatch, getState }) => {
+        const id = getOrderId(getState())
+        let result;
+        do {
+            result = await orderApi.getOrder(id)
+        } while(result == null || result.payment.receiptURL == null) 
+
+         
+        return result.payment.receiptURL;
+
+    }
+)
+
+
+
+
+
+
 
 export const orderReducer = createSlice({
     name: 'order',
@@ -47,9 +66,6 @@ export const orderReducer = createSlice({
         paymentInfo: {
             clientSecret: "",
             cardInfo: {
-                // cardNum: "",
-                // expiry: "",
-                // cvc: ""
             }
         },
         delivery: {
@@ -62,7 +78,8 @@ export const orderReducer = createSlice({
         items: {},
         tipMultiplier: 0.1,
         taxMultiplier: 0.1,
-
+        receiptUrl: "",
+        id: ""
     },
     reducers: {
         addOrder: {
@@ -76,7 +93,7 @@ export const orderReducer = createSlice({
                     }
                 }
             },
-            prepare: ({item, quantity, addons, specialInstruction}) => {
+            prepare: ({ item, quantity, addons, specialInstruction }) => {
                 const orderKey = getHash([item.id, specialInstruction, ...(addons.concat().sort())].join());
                 return {
                     payload: {
@@ -110,26 +127,33 @@ export const orderReducer = createSlice({
         setCardInfo: (state, action) => {
             state.paymentInfo.cardInfo = action.payload;
         },
-        setClientSecret:(state, action) => {
-            state.paymentInfo.clientSecret=action.payload;
+        setClientSecret: (state, action) => {
+            state.paymentInfo.clientSecret = action.payload;
         },
 
         setPickupTime: (state, action) => {
-            
+
             state.delivery.pickup.time = action.payload;
         },
 
         setPickupTimeOption: (state, action) => {
             state.delivery.pickup.option = action.payload;
         }
-        
+
     },
     extraReducers: (builder) => {
-        builder.addCase(getMerchant.fulfilled, (state, action ) => {
-        //   state.loading = true;
-        state.delivery.merchantId =  action.payload.id;
-        });      
-      }
+        builder.addCase(getMerchant.fulfilled, (state, action) => {
+            state.delivery.merchantId = action.payload.id;
+        });
+
+        builder.addCase(submitOrder.fulfilled, (state, action) => {
+            state.id = action.payload.id;
+        });
+
+        builder.addCase(fetchReceiptUrl.fulfilled, (state, action) => {
+            state.receiptUrl = action.payload;
+        });
+    }
 })
 
 

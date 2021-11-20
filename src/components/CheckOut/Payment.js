@@ -7,6 +7,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  LinearProgress,
 } from "@material-ui/core";
 import { useForm, Controller } from "react-hook-form";
 import styled from "styled-components";
@@ -50,9 +51,9 @@ const MyText = styled.p`
 function Payment({ onFinished }) {
   const stripe = useStripe();
   const element = useElements();
+  const [loading, setLoading] = useState(false);
   const [clientSecret, setClientSecret] = useState("");
   const cardInfo = useSelector(getCardInfo);
-  const paymentAmount = useSelector(getTotal)
   const dispatch = useDispatch();
   const {  handleSubmit, control, setError, clearErrors } = useForm({
     defaultValues: cardInfo
@@ -60,7 +61,6 @@ function Payment({ onFinished }) {
   const [value, setValue] = React.useState("credit");
    useEffect (() => { 
       dispatch(submitOrder()).then(result => setClientSecret(result.payload.payment.clientSecret))    
-      // paymentIntent(paymentAmount).then(result =>  setClientSecret(result["clientSecret"]))             
       }, []);
     
   const handleChange = (event) => {
@@ -68,9 +68,8 @@ function Payment({ onFinished }) {
   };
 
   const onSubmit = async (data) => {
-
+    setLoading(true);
     const cardElement = element.getElement(CardElement);
-    console.log(cardElement);
     if (cardElement) {
       const payload = await stripe.confirmCardPayment(clientSecret, {
           payment_method: {
@@ -78,14 +77,15 @@ function Payment({ onFinished }) {
           },
         });
         if (payload.error) {    
-          console.log("Error", payload.error);
+          // console.log("Error", payload.error);
         } else {
-          console.log("Success", payload);         
-          
+          // console.log("Success", payload);         
+          onFinished();
         }
       }
+
+      setLoading(false);
    
-    // onFinished();
   }
 
   const clearErrorsBeforeChange = (changeHandler) => (e) => {
@@ -149,8 +149,13 @@ function Payment({ onFinished }) {
         </MyContainer>
 
         <Divider variant="middle" />
-
-        <SubmitButton onClick={handleSubmit(onSubmit)} color="primary" fullWidth variant="contained"> Confirm Payment   </SubmitButton>
+          {loading ? 
+          <LinearProgress color="secondary" />
+          :
+          <SubmitButton onClick={handleSubmit(onSubmit)} color="primary" fullWidth variant="contained">
+            Confirm Payment
+          </SubmitButton>
+          }
       </form>
     </Box>
   );

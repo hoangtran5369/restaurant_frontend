@@ -12,4 +12,13 @@ export const postOrder = async (orderData) => {
     return resp.data;
 }
 
-export default {postOrder, getMerchant }
+export const getOrder = async (id) => {
+    console.log("ID: ", id)
+    const resp = await api.get(`/order/${id}`);
+
+    console.log("API: ", resp)
+    return resp.data;
+}
+
+
+export default {postOrder, getMerchant, getOrder }

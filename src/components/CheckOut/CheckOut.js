@@ -13,10 +13,13 @@ import {
   import Delivery from "components/CheckOut/Delivery";
   import Payments from "components/CheckOut/Payment";
   import ReviewSubmit from "components/CheckOut/ReviewSubmit";
+  import Receipt from "components/CheckOut/Receipt";
   import { useState } from "react";
   import { useHistory } from "react-router";
   import { Elements } from "@stripe/react-stripe-js"; 
 import { loadStripe } from "@stripe/stripe-js";
+import { useSelector } from "react-redux";
+import { orderIsEmpty } from "store/Order/selector";
 
 
   const stripePromise = loadStripe(
@@ -66,11 +69,13 @@ import { loadStripe } from "@stripe/stripe-js";
 
   function CheckOut() {
     const history = useHistory();
-    const steps = ["1. Your information", "2. Delivery options", "3. Confirm Infomation", "4. Payment"];
-  
+    const steps = ["1. Your information", "2. Delivery options", "3. Confirm Information", "4. Payment", "5. Receipt"];
+    const emptyCart = useSelector(orderIsEmpty);
     
-  
     const [currentStep, setCurrentStep] = useState(0);
+    if (emptyCart) {
+      history.push('/menu');
+    }
   
     return (
       <Box minHeight="100vh" flexDirection="column" display="flex">
@@ -96,8 +101,10 @@ import { loadStripe } from "@stripe/stripe-js";
                 variant="fullWidth"
                 aria-label="full width tabs example"
               >
-                {steps.map((step, index) => <StyledTab disabled={index > currentStep}  label={step} />)}
+                {steps.map((step, index) => <StyledTab disabled={index > currentStep || (currentStep === 4 && index !== 4) }  label={step} />)}
               </StyledTabs>
+
+
               <CardContent>
               <Elements stripe={stripePromise} >             
              
@@ -111,10 +118,11 @@ import { loadStripe } from "@stripe/stripe-js";
                    <ReviewSubmit onFinished={()=>setCurrentStep(3) }/>
               </TabPanel>
               <TabPanel value={currentStep} index={3}>
-                  <Payments />
-                   
+                  <Payments onFinished={()=> setCurrentStep(4)}/>
               </TabPanel>
-               
+              <TabPanel value={currentStep} index={4}>
+                  <Receipt />
+              </TabPanel>
               </Elements> 
               </CardContent>
             </StyledCard>
