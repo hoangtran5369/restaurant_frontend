@@ -34,6 +34,20 @@ export const getCategoryNames = createSelector(
     (foodMenu) => foodMenu.categories.map(cat => cat.name)
 )
 
+export const getFeaturedItems = createSelector(
+    getCategories,
+    (categories) => {
+        if (categories.length > 1) {
+            return categories[1].menuItems;
+        }
+        if (categories.length == 1) {
+            return categories[0].menuItems;
+        } else {
+            return [];
+        }
+    }
+)
+
 export const getCategoryIndex = createSelector(
     foodMenuSelector,
     (foodMenu) => foodMenu.categoryIndex

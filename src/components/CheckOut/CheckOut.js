@@ -18,8 +18,9 @@ import {
   import { useHistory } from "react-router";
   import { Elements } from "@stripe/react-stripe-js"; 
 import { loadStripe } from "@stripe/stripe-js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { orderIsEmpty } from "store/Order/selector";
+import { resetOrder } from "store/Order/reducer";
 
 
   const stripePromise = loadStripe(
@@ -71,9 +72,14 @@ import { orderIsEmpty } from "store/Order/selector";
     const history = useHistory();
     const steps = ["1. Your information", "2. Delivery options", "3. Confirm Information", "4. Payment", "5. Receipt"];
     const emptyCart = useSelector(orderIsEmpty);
-    
+    const dispatch = useDispatch();
     const [currentStep, setCurrentStep] = useState(0);
     if (emptyCart) {
+      history.push('/menu');
+    }
+
+    const onCheckoutFinished = () => {
+      dispatch(resetOrder());
       history.push('/menu');
     }
   
@@ -121,7 +127,7 @@ import { orderIsEmpty } from "store/Order/selector";
                   <Payments onFinished={()=> setCurrentStep(4)}/>
               </TabPanel>
               <TabPanel value={currentStep} index={4}>
-                  <Receipt />
+                  <Receipt onFinished={onCheckoutFinished}/>
               </TabPanel>
               </Elements> 
               </CardContent>

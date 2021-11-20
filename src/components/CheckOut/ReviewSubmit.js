@@ -12,6 +12,7 @@ import { getCardInfo, getClientSecret, getCreditCardText, getCustomerInfo, getPa
 import { submitOrder } from "store/Order/reducer";
 import { StripeCardElementChangeEvent, StripeError } from "@stripe/stripe-js";
 import { useStripe } from "@stripe/react-stripe-js";
+import { merchantSelector } from "store/Merchant/selector";
 
 const MyContainer = styled.div`
   display: flex;
@@ -36,7 +37,6 @@ const SubmitButton = styled(Button)`
 
 function ReviewSubmit({ onFinished }) {
   const dispatch = useDispatch();
-  const stripe = useStripe();
    
   const customerInfo = useSelector(getCustomerInfo);
   const paymentInfo = useSelector(getPaymentInfo);
@@ -46,24 +46,9 @@ function ReviewSubmit({ onFinished }) {
   const cardElement = useSelector(getCardInfo);
   const clientSecret = useSelector(getClientSecret);
 
+  const merchant = useSelector(merchantSelector);
   const onSubmitClicked = async () => {
- 
-    
-//  if (cardElement) {
-//     const payload = await stripe.confirmCardPayment(clientSecret, {
-//         payment_method: {
-//           card: cardElement,
-//         },
-//       });
-//       if (payload.error) {    
-//         console.log("Error", payload.error);
-//       } else {
-//         console.log("Success", payload);
-        
-        
-//       }
-//     }
-    // dispatch(submitOrder())
+  
     if (onFinished) {
       onFinished()
     }
@@ -84,11 +69,8 @@ function ReviewSubmit({ onFinished }) {
           </p>
           <p>Delivery option:  <br/> 
           Pickup at: <br/> 
-                Pho 28 <br/> 
-                2569 King Road <br/> 
-                Suite C9 <br/> 
-                San Jose, California 95122
-                United States <br/>  <br/> 
+                {merchant.name} <br/> 
+                {merchant.address} <br/> 
                 Your order will be ready <br/> 
                 {moment(pickupTimeStr).calendar()} <br/> 
                 Pickup instructions <br/> 
@@ -96,13 +78,8 @@ function ReviewSubmit({ onFinished }) {
           </p>
 
           <br/> 
-          <p>PAYMENT INFORMATION:   <br/> 
-                 {creditCardText}
-            </p>
-          <p> 
-              REVIEW & SUBMIT ORDER:  <br/> 
-             
-          </p>
+          
+      
         </FormContainer>
 
         <OrderInfo></OrderInfo>

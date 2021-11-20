@@ -19,7 +19,8 @@ import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { setPickupTime, setPickupTimeOption } from "store/Order/reducer";
 import { getPickupTime, getPickupTimeOption } from "store/Order/selector";
-import { getMerchant } from "store/Order/reducer";
+import { getMerchant } from "store/Merchant/reducer";
+import { merchantSelector } from "store/Merchant/selector";
 
 const MyContainer = styled.div`
   display: flex;
@@ -53,6 +54,7 @@ const MyText = styled.p`
 
 function Delivery({ onFinished }) {
   const dispatch = useDispatch();
+  const merchant = useSelector(merchantSelector)
   const [deliveryOption, setDeliveryOption] = useState("Pickup");
   const storePickupTimeOption = useSelector(getPickupTimeOption)
   const [pickUpTimeOption, setFormPickUpTimeOption] = useState(storePickupTimeOption);
@@ -60,9 +62,8 @@ function Delivery({ onFinished }) {
   const earliestTime = moment().add(30, 'minutes').format().slice(0,16)
   const [pickupTime, setFormPickupTime] = useState(earliestTime)
   const [pickupTimeError, setPickupTimeError] = useState("")
+
   
-  useEffect( () => {
-    dispatch(getMerchant()) }, []  ) 
   const validatePickupTime = (pickupTime) => {
     return moment(pickupTime).isAfter(moment(earliestTime).subtract(1, "minutes"), "minute")
   }
@@ -118,10 +119,9 @@ function Delivery({ onFinished }) {
           {deliveryOption === "Pickup" && (
             <Box>
               <p>Pickup at</p>
-              <MyText>Pho 28</MyText>
-              <MyText>1 Washington Square</MyText>
-              <MyText>San Jose, CA 95112</MyText>
-              <MyText>United States</MyText>
+              <MyText>{merchant.name}</MyText>
+              <MyText>{merchant.address}</MyText>
+              <MyText>{merchant.phone}</MyText>
               <RadioGroup
                 value={pickUpTimeOption}
                 onChange={(event) => {

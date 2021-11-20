@@ -8,7 +8,7 @@ import React from "react";
 import { AmplifySignOut } from '@aws-amplify/ui-react';
 
 import styled from "styled-components";
-import { userLoggedIn, getUserName } from "../store/auth/selector";
+import { userLoggedIn, getUserName, getUser, authSelector } from "../store/auth/selector";
 
 const StyledAppBar = styled(AppBar)`
     background-color: rgb(42, 65, 44);

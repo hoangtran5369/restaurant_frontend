@@ -9,12 +9,22 @@ export const getUser = createSelector(
 );
 
 export const getUserName = createSelector(
-    getUser, 
-    (user) => user
+    authSelector, 
+    (user) => user.username
 );
 
 export const userLoggedIn = createSelector(
     authSelector, 
     auth => auth.authState === "signedin"
+)
+
+export const getUserPhone = createSelector(
+    authSelector,
+    (user) => user.phone
+)
+
+export const getUserEmail = createSelector(
+    authSelector,
+    (user) => user.email
 )
 

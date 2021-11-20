@@ -14,6 +14,7 @@ import { getCustomerInfo } from "store/Order/selector";
 import { setCustomerInfo } from "store/Order/reducer";
 import React from "react";
 import 'react-phone-input-2/lib/material.css'
+import { useEffect } from "react";
 
 const MyContainer = styled.div`
   display: flex;
@@ -42,12 +43,16 @@ function CustomerInfo({ onFinished }) {
   const { handleSubmit, control, setError, clearErrors } = useForm({
     defaultValues: customer
   });
+
+
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
     dispatch(setCustomerInfo(data));
     onFinished();
   };
+
+
 
   return (
     <Box>

@@ -12,8 +12,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrderItemInfo } from "store/Order/selector";
 import { changeQuantity, removeOrderItem } from "store/Order/reducer";
 import React from "react";
+import AWSImage from "components/Menu/AWSItemImage";
 
-const OrderItemImage = styled.img`
+const OrderItemImage = styled(AWSImage)`
   height: 50px;
   width: 50px;
   margin-right: 10px;
@@ -26,6 +27,7 @@ const OrderItemImage = styled.img`
 const QuantityPicker = styled(TextField)`
     width: 80px;
 `
+
 
 function OrderItem(props) {
     const { order, editable } = props;
