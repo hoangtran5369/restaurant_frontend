@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import  authReducer  from 'store/auth/reducer';
 import orderReducer from 'store/Order/reducer';
 import foodMenuReducer from 'store/FoodMenu/reducer';
+import  merchantReducer  from 'store/Merchant/reducer';
 
 const persistConfig = {
   key: "root",
@@ -13,7 +14,8 @@ const persistConfig = {
 const baseReducer = combineReducers({
   auth: authReducer,
   order: orderReducer,
-  foodMenu: foodMenuReducer
+  foodMenu: foodMenuReducer,
+  merchant: merchantReducer
 });
 
 const persistedRedcer =  persistReducer(persistConfig, baseReducer);

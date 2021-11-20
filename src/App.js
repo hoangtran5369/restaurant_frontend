@@ -5,6 +5,7 @@ import Amplify from 'aws-amplify';
 import awsconfig from 'aws-exports';
 import store from "./store";
 import AuthProvider from "components/AuthProvider";
+import RestaurantProvider from 'components/RestaurantProvider';
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
 
@@ -18,7 +19,9 @@ function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
       <AuthProvider>
-        <AppRoutes />
+        <RestaurantProvider>
+          <AppRoutes />
+        </RestaurantProvider>
       </AuthProvider>
       </PersistGate>
     </Provider>

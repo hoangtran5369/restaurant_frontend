@@ -100,7 +100,7 @@ function Receipt({ onFinished }) {
         fullWidth
         variant="contained"
       >
-        Place your Order
+        Finish
       </SubmitButton>
     </Box>
   );

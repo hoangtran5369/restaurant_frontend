@@ -1,5 +1,8 @@
-import { Typography } from "@material-ui/core";
-import styled from "styled-components"
+import { CircularProgress, Typography } from "@material-ui/core";
+import { useSelector } from "react-redux";
+import { merchantIsLoading, merchantSelector } from "store/Merchant/selector";
+import styled from "styled-components";
+import moment from "moment";
 
 const FooterContainer = styled.div`
     height: 20vh;
@@ -32,6 +35,12 @@ const CopyrightContainer = styled.div`
 `
 
 function Footer() {
+    const isLoading = useSelector(merchantIsLoading);
+    const merchant = useSelector(merchantSelector);
+    if (isLoading) {
+        return <CircularProgress />
+    }
+
     return (
         <FooterContainer>
             <ContactContainer>
@@ -39,19 +48,19 @@ function Footer() {
                     Contact us
                 </Typography>
                 <Typography variant="body1">
-                    Pho 28
+                    {merchant.name}
                 </Typography>
                 <Typography variant="body1">
-                    (408)-123-4567
+                    {merchant.phone}
                 </Typography>
                 <Typography variant="body1">
-                    1 Washington Sq, San Jose, CA 95122
+                    {merchant.address}
                 </Typography>
             </ContactContainer>
 
             <CopyrightContainer>
                 <Typography variant="body1" gutterBottom>
-                   Pho28 | Copyright 2021 All rights reserved
+                   {merchant.name} | Copyright 2021 All rights reserved
                 </Typography>
             </CopyrightContainer>
 
@@ -59,21 +68,14 @@ function Footer() {
                 <Typography variant="h6" gutterBottom>
                     HOURS
                 </Typography>
-                <Typography variant="body1">
-                    Closed: Monday & Wednesday
-                </Typography>
-                <Typography variant="body1">
-                    Thursday: 9:00AM - 7:00PM
-                </Typography>
-                <Typography variant="body1">
-                    Friday: 9:00AM - 7:00PM
-                </Typography>
-                <Typography variant="body1">
-                    Saturday: 9:00AM - 7:00PM
-                </Typography>
-                <Typography variant="body1">
-                    Sunday: 9:00AM - 7:00PM
-                </Typography>
+                {merchant.hours.map(hour => 
+                    (
+                    <Typography variant="body1">
+                        {hour.day} : {moment(hour.start, "HH:mm:ss").format("LT")} - {moment(hour.end, "HH:mm:ss").format("LT")}
+                    </Typography>
+                    )
+                )}
+               
             </HoursContainer>
         </FooterContainer>
     );

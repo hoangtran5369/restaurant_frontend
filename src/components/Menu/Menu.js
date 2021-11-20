@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getFilteredItems, isLoading } from "store/FoodMenu/selector";
 import Cart from "components/Menu/Cart";
 import React, { useEffect } from "react";
-import { fetchMenu } from "store/FoodMenu/reducer";
 
 const MainContainer = styled.div`
     display: flex;
@@ -54,10 +53,6 @@ function Menu() {
     const foodMenuItems = useSelector(getFilteredItems);
     const showLoading = useSelector(isLoading);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(fetchMenu());
-    }, [dispatch]);
 
     return (
         <React.Fragment>

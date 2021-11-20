@@ -26,6 +26,10 @@ import {
 import { hideItem } from "store/FoodMenu/reducer";
 import React, { useEffect, useState } from "react";
 import { addOrder } from "store/Order/reducer";
+import {Storage} from 'aws-amplify';
+import AWSImage from "components/Menu/AWSItemImage";
+
+
 
 const MyModal = styled(Modal)`
   margin: auto;
@@ -59,11 +63,6 @@ const ImageContainer = styled.div`
   border: 1px solid rgb(205, 205, 205);
   border-radius: 25px;
 
-  &:after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
-  }
 `;
 
 const GalleryList = styled(GridList)`
@@ -86,12 +85,20 @@ const PreviewContainer = styled.div`
   overflow: hidden;
 `;
 
-const PreviewImage = styled.img`
+const PreviewImage = styled(AWSImage)`
   width: 100%;
   height: 100%;
   object-fit: cover;
   position: absolute;
 `;
+
+const DisplayedImage = styled(AWSImage)`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`
+
+
 
 function AddonPicker(props) {
   const { addonGroup, onAddonChange } = props;
@@ -186,6 +193,10 @@ function FoodItemModal() {
     })
   }
 
+  if (!item) {
+    return <></>
+  }
+
   return (
     <MyModal
       BackdropProps={{ invisible: true }}
@@ -205,7 +216,7 @@ function FoodItemModal() {
                 <GridListTile>
                   <PreviewContainer>
                     <PreviewImage
-                      src="https://i.imgur.com/yGeOUMB.jpg"
+                      src={item.imageUrl}
                       alt=""
                     />
                   </PreviewContainer>
@@ -214,7 +225,10 @@ function FoodItemModal() {
             </Grid>
 
             <Grid item xs={9}>
-              <ImageContainer></ImageContainer>
+              <ImageContainer>
+              <DisplayedImage src="placeholder.png" />
+
+              </ImageContainer>
             </Grid>
           </Grid>
         </LeftContainer>

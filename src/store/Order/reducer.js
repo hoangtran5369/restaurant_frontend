@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { getOrderData, getOrderId, getPaymentInfo } from "store/Order/selector"
+import { logIn } from 'store/auth/reducer';
 import orderApi from 'store/Order/api';
 
 
@@ -14,20 +15,12 @@ function getHash(str) {
     return hash;
 };
 
-export const getMerchant = createAsyncThunk(
-    'order/getMerchant', async () => {
-        const result = await orderApi.getMerchant()
-        return result
-
-    }
-)
-
-
 
 export const submitOrder = createAsyncThunk(
     'order/submitOrder', async (_, { dispatch, getState }) => {
-        const orderData = getOrderData(getState())
-        const result = await orderApi.postOrder(orderData)
+        const orderData = getOrderData(getState());
+        const result = await orderApi.postOrder(orderData);
+        console.log(result);
         return result
 
     }
@@ -52,35 +45,35 @@ export const fetchReceiptUrl = createAsyncThunk(
 
 
 
-
+const initialState = {
+    customerInfo: {
+        firstname: "",
+        surname: "",
+        email: "",
+        phone: ""
+    },
+    paymentInfo: {
+        clientSecret: "",
+        cardInfo: {
+        }
+    },
+    delivery: {
+        pickup: {
+            time: "",
+            option: "now"
+        },
+        merchantId: ""
+    },
+    items: {},
+    tipMultiplier: 0.1,
+    taxMultiplier: 0.1,
+    receiptUrl: "",
+    id: ""
+}
 
 export const orderReducer = createSlice({
     name: 'order',
-    initialState: {
-        customerInfo: {
-            firstname: "",
-            surname: "",
-            email: "",
-            phone: ""
-        },
-        paymentInfo: {
-            clientSecret: "",
-            cardInfo: {
-            }
-        },
-        delivery: {
-            pickup: {
-                time: "",
-                option: "now"
-            },
-            merchantId: ""
-        },
-        items: {},
-        tipMultiplier: 0.1,
-        taxMultiplier: 0.1,
-        receiptUrl: "",
-        id: ""
-    },
+    initialState,
     reducers: {
         addOrder: {
             reducer: (state, action) => {
@@ -109,7 +102,7 @@ export const orderReducer = createSlice({
 
         changeQuantity: (state, action) => {
             const { orderKey, quantity } = action.payload;
-            state.items[orderKey].quantity = quantity;
+            state.items[orderKey].quantity = parseInt(quantity);
         },
 
         removeOrderItem: (state, action) => {
@@ -138,13 +131,21 @@ export const orderReducer = createSlice({
 
         setPickupTimeOption: (state, action) => {
             state.delivery.pickup.option = action.payload;
+        },
+
+        resetOrder: (state) => {
+            state.customerInfo = initialState.customerInfo;
+            state.items = initialState.items;
+            state.delivery = initialState.delivery;
+            state.paymentInfo = initialState.paymentInfo;
+            state.id = initialState.id;
+            state.taxMultiplier = initialState.taxMultiplier;
+            state.tipMultiplier = initialState.tipMultiplier;
         }
 
     },
     extraReducers: (builder) => {
-        builder.addCase(getMerchant.fulfilled, (state, action) => {
-            state.delivery.merchantId = action.payload.id;
-        });
+
 
         builder.addCase(submitOrder.fulfilled, (state, action) => {
             state.id = action.payload.id;
@@ -153,6 +154,12 @@ export const orderReducer = createSlice({
         builder.addCase(fetchReceiptUrl.fulfilled, (state, action) => {
             state.receiptUrl = action.payload;
         });
+
+        builder.addCase(logIn().type, (state, action) => {
+            const {email, phone_number} = action.payload.user.attributes;
+            state.customerInfo.email = email;
+            state.customerInfo.phone = phone_number;
+        });
     }
 })
 
@@ -160,7 +167,7 @@ export const orderReducer = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const { addOrder, changeQuantity, removeOrderItem, setTip, setCustomerInfo, setCardInfo, setClientSecret, setPickupTime, setPickupTimeOption } = orderReducer.actions
+export const { resetOrder, addOrder, changeQuantity, removeOrderItem, setTip, setCustomerInfo, setCardInfo, setClientSecret, setPickupTime, setPickupTimeOption } = orderReducer.actions
 
 export default orderReducer.reducer
 
