@@ -47,6 +47,7 @@ export const fetchReceiptUrl = createAsyncThunk(
 
 const initialState = {
     customerInfo: {
+        id: "",
         firstname: "",
         surname: "",
         email: "",
@@ -156,7 +157,8 @@ export const orderReducer = createSlice({
         });
 
         builder.addCase(logIn().type, (state, action) => {
-            const {email, phone_number} = action.payload.user.attributes;
+            const {email, phone_number, sub} = action.payload.user.attributes;
+            state.customerInfo.id = sub;
             state.customerInfo.email = email;
             state.customerInfo.phone = phone_number;
         });

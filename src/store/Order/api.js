@@ -13,12 +13,22 @@ export const postOrder = async (orderData) => {
 }
 
 export const getOrder = async (id) => {
-    console.log("ID: ", id)
     const resp = await api.get(`/order/${id}`);
 
-    console.log("API: ", resp)
     return resp.data;
 }
+
+export const getCustomerOrders = async (id) => {
+    const resp = await api.get('/order');
+    console.log(resp);
+    console.log(id);
+    if (resp.status !== 200) {
+        return []
+    } else {
+        return resp.data.filter(order => order.customer.id === id);
+    }
+}
+
 
 
 export default {postOrder, getMerchant, getOrder }

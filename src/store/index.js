@@ -5,7 +5,7 @@ import  authReducer  from 'store/auth/reducer';
 import orderReducer from 'store/Order/reducer';
 import foodMenuReducer from 'store/FoodMenu/reducer';
 import  merchantReducer  from 'store/Merchant/reducer';
-
+import orderListReducer  from 'store/OrderList/reducer';
 const persistConfig = {
   key: "root",
   storage
@@ -15,7 +15,8 @@ const baseReducer = combineReducers({
   auth: authReducer,
   order: orderReducer,
   foodMenu: foodMenuReducer,
-  merchant: merchantReducer
+  merchant: merchantReducer,
+  orderList: orderListReducer
 });
 
 const persistedRedcer =  persistReducer(persistConfig, baseReducer);

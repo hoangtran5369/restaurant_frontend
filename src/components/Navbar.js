@@ -71,7 +71,7 @@ function Navbar() {
     } else {
         userSection = (
             <React.Fragment>
-                <Button color="inherit" onClick={() => { }}><h3>Hello, {username}!</h3></Button>
+                <Button color="inherit" onClick={() => history.push('/orders')}><h3>Hello, {username}!</h3></Button>
 
                 <AmplifySignOut />
 
