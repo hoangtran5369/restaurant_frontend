@@ -26,10 +26,8 @@ import {
 import { hideItem } from "store/FoodMenu/reducer";
 import React, { useEffect, useState } from "react";
 import { addOrder } from "store/Order/reducer";
-import {Storage} from 'aws-amplify';
+import { Storage } from "aws-amplify";
 import AWSImage from "components/Menu/AWSItemImage";
-
-
 
 const MyModal = styled(Modal)`
   margin: auto;
@@ -43,7 +41,7 @@ const MyModal = styled(Modal)`
 
 const MainContainer = styled.div`
   display: flex;
-  align-items:stretch;
+  align-items: stretch;
   padding: 2rem;
   height: 100%;
   overflow: scroll;
@@ -62,7 +60,6 @@ const ImageContainer = styled.div`
   max-width: 600px;
   border: 1px solid rgb(205, 205, 205);
   border-radius: 25px;
-
 `;
 
 const GalleryList = styled(GridList)`
@@ -96,9 +93,7 @@ const DisplayedImage = styled(AWSImage)`
   width: 100%;
   height: 100%;
   object-fit: cover;
-`
-
-
+`;
 
 function AddonPicker(props) {
   const { addonGroup, onAddonChange } = props;
@@ -108,24 +103,30 @@ function AddonPicker(props) {
   useEffect(() => {
     if (isRequired && addonGroup.addons.length > 0) {
       setPickedAddons({
-        [addonGroup.addons[0].id]: true
-      })
+        [addonGroup.addons[0].id]: true,
+      });
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
-    onAddonChange(Object.keys(pickedAddons).filter(addonId => pickedAddons[addonId]))
-  }, [pickedAddons])
+    onAddonChange(
+      Object.keys(pickedAddons).filter((addonId) => pickedAddons[addonId])
+    );
+  }, [pickedAddons]);
 
   const handleChange = (event) => {
     if (pickOneOnly) {
-      setPickedAddons({ [event.target.value]: true })
+      setPickedAddons({ [event.target.value]: true });
     } else {
-      setPickedAddons({ ...pickedAddons, [event.target.name]: event.target.checked })
+      setPickedAddons({
+        ...pickedAddons,
+        [event.target.name]: event.target.checked,
+      });
     }
-  }
+  };
 
-  const getAddonLabel = (addon) => `${addon.name} ${addon.price !== 0 ? `(+$${addon.price})` : ""}`
+  const getAddonLabel = (addon) =>
+    `${addon.name} ${addon.price !== 0 ? `(+$${addon.price})` : ""}`;
 
   if (!pickOneOnly) {
     return (
@@ -134,22 +135,24 @@ function AddonPicker(props) {
         <FormGroup>
           {addonGroup.addons.map((addon) => (
             <FormControlLabel
-              control={
-                <Checkbox name={addon.id} onChange={handleChange} />
-              }
+              control={<Checkbox name={addon.id} onChange={handleChange} />}
               label={getAddonLabel(addon)}
             />
           ))}
         </FormGroup>
       </FormControl>
     );
-  }
-  else {
+  } else {
     return (
       <FormControl component="fieldset">
         <FormLabel component="legend">{addonGroup.name}</FormLabel>
         <RadioGroup
-          defaultValue={(isRequired && addonGroup.addons.length > 0) ? addonGroup.addons[0].id : ""}>
+          defaultValue={
+            isRequired && addonGroup.addons.length > 0
+              ? addonGroup.addons[0].id
+              : ""
+          }
+        >
           {addonGroup.addons.map((addon) => (
             <FormControlLabel
               control={<Radio />}
@@ -160,7 +163,7 @@ function AddonPicker(props) {
           ))}
         </RadioGroup>
       </FormControl>
-    )
+    );
   }
 }
 
@@ -179,22 +182,22 @@ function FoodItemModal() {
   }, [item]);
 
   const handleOrder = () => {
-    const addons = Object.values(pickedAddons).flat()
+    const addons = Object.values(pickedAddons).flat();
     dispatch(addOrder({ item, quantity, addons, specialInstruction }));
     dispatch(hideItem());
   };
 
-  const handleClose = () => dispatch(hideItem())
+  const handleClose = () => dispatch(hideItem());
 
   const handleAddonChange = (groupId) => (addons) => {
     setPickedAddons({
       ...pickedAddons,
-      [groupId]: addons
-    })
-  }
+      [groupId]: addons,
+    });
+  };
 
   if (!item) {
-    return <></>
+    return <></>;
   }
 
   return (
@@ -215,10 +218,7 @@ function FoodItemModal() {
               <GalleryList cellHeight="auto" cols={1}>
                 <GridListTile>
                   <PreviewContainer>
-                    <PreviewImage
-                      src={item.imageUrl}
-                      alt=""
-                    />
+                    <PreviewImage src={item.imageUrl} alt="" />
                   </PreviewContainer>
                 </GridListTile>
               </GalleryList>
@@ -226,24 +226,25 @@ function FoodItemModal() {
 
             <Grid item xs={9}>
               <ImageContainer>
-              <DisplayedImage src="placeholder.png" />
-
+                <DisplayedImage src="placeholder.png" />
               </ImageContainer>
             </Grid>
           </Grid>
         </LeftContainer>
 
         <RightContainer>
-
           <Typography variant="h4">{item && item.name}</Typography>
           <Typography variant="h5" gutterBottom>
             ${item && item.price}
           </Typography>
-          {addonGroups.map((group) =>
+          {addonGroups.map((group) => (
             <Box marginY="30px">
-              <AddonPicker addonGroup={group} onAddonChange={handleAddonChange(group.id)} />
+              <AddonPicker
+                addonGroup={group}
+                onAddonChange={handleAddonChange(group.id)}
+              />
             </Box>
-          )}
+          ))}
 
           <TextField
             label="Special instructions"
@@ -253,7 +254,6 @@ function FoodItemModal() {
             variant="outlined"
           />
           <Box marginY="20px" display="flex" alignItems="stretch">
-
             <QuantityPicker
               label="Count"
               value={quantity}
@@ -272,9 +272,8 @@ function FoodItemModal() {
             >
               Add to cart
             </OrderButton>
-              </Box>
+          </Box>
           <Box height="150px" />
-
         </RightContainer>
       </MainContainer>
     </MyModal>

@@ -1,45 +1,57 @@
 import { useHistory } from "react-router-dom";
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import Toolbar from '@material-ui/core/Toolbar';
+import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
+import Toolbar from "@material-ui/core/Toolbar";
 import { Typography, Menu, MenuItem } from "@material-ui/core";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 import React from "react";
-import { AmplifySignOut } from '@aws-amplify/ui-react';
+import { AmplifySignOut } from "@aws-amplify/ui-react";
 
 import styled from "styled-components";
-import { userLoggedIn, getUserName, getUser, authSelector } from "../store/auth/selector";
+import {
+  userLoggedIn,
+  getUserName,
+  getUser,
+  authSelector,
+} from "../store/auth/selector";
 
 const StyledAppBar = styled(AppBar)`
-    background-color: rgb(42, 65, 44);
-    color: white;
-`
+  background-color: rgb(42, 65, 44);
+  color: white;
+`;
 
 const Title = styled(Typography)`
-    margin: 0.5rem;
-`
+  margin: 0.5rem;
+  font-size: 60px;
+  font-family: Copperplate, fantasy, monospace;
+`;
+
+const MyButton = styled(Button)`
+&:hover {
+    background-color: #FF9933;
+    font-size: 110%;
+`;
 
 const MenuGroup = styled.div`
-    flex-grow: 1;
-` 
-
+  flex-grow: 1;
+`;
 
 const MorePopup = () => {
-    const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-    return (
-        <React.Fragment>
-      <Button color="inherit" onClick={handleClick}>
+  return (
+    <React.Fragment>
+      <MyButton color="inherit" onClick={handleClick}>
         <h3>More</h3>
-      </Button>
+      </MyButton>
       <Menu
         id="more-menu"
         anchorEl={anchorEl}
@@ -52,53 +64,64 @@ const MorePopup = () => {
         <MenuItem onClick={handleClose}>Option3</MenuItem>
       </Menu>
     </React.Fragment>
-    )
-}
-
+  );
+};
 
 function Navbar() {
-    const history = useHistory();
-    const userIsLoggedIn = useSelector(userLoggedIn);
-    const username = useSelector(getUserName);
-    let userSection;
-    if (!userIsLoggedIn) {
-        userSection = (
-            <React.Fragment>
-                <Button color="inherit" onClick={() => history.push('/login')}><h3>Login / Register</h3></Button>
-
-            </React.Fragment>
-        )
-    } else {
-        userSection = (
-            <React.Fragment>
-                <Button color="inherit" onClick={() => history.push('/orders')}><h3>Hello, {username}!</h3></Button>
-
-                <AmplifySignOut />
-
-            </React.Fragment>
-        )
-    }
-
-    return (
-        <StyledAppBar position="sticky" color="inherit">
-            <Toolbar>
-                <Title variant="h4" onClick={() => history.push('/')}>
-                    PHO 28
-                </Title>
-
-                <MenuGroup>                    
-                    <Button color="inherit" onClick={() => history.push('/menu')}><h3>Menu</h3></Button>
-                    <Button color="inherit"onClick={() => history.push('/Promotions')}><h3>Promos</h3></Button>
-                    <Button color="inherit"  onClick={() => history.push('/reservation')}><h3>Reservation</h3></Button>
-                    <Button color="inherit"><h3>Reward</h3></Button>
-                    <MorePopup />
-                </MenuGroup>
-
-                {userSection}
-
-            </Toolbar>
-        </StyledAppBar>
+  const history = useHistory();
+  const userIsLoggedIn = useSelector(userLoggedIn);
+  const username = useSelector(getUserName);
+  let userSection;
+  if (!userIsLoggedIn) {
+    userSection = (
+      <React.Fragment>
+        <Button color="inherit" onClick={() => history.push("/login")}>
+          <h3>Login / Register</h3>
+        </Button>
+      </React.Fragment>
     );
+  } else {
+    userSection = (
+      <React.Fragment>
+        <Button color="inherit" onClick={() => history.push("/orders")}>
+          <h3>Hello, {username}!</h3>
+        </Button>
+
+        <AmplifySignOut />
+      </React.Fragment>
+    );
+  }
+
+  return (
+    <StyledAppBar position="sticky" color="inherit">
+      <Toolbar>
+        <Title variant="h4" onClick={() => history.push("/")}>
+          Pho28
+        </Title>
+
+        <MenuGroup>
+          <MyButton color="inherit" onClick={() => history.push("/menu")}>
+            <h3>Menu</h3>
+          </MyButton>
+          <MyButton color="inherit" onClick={() => history.push("/Promotions")}>
+            <h3>Promos</h3>
+          </MyButton>
+          <MyButton
+            color="inherit"
+            onClick={() => history.push("/reservation")}
+          >
+            <h3>Reservation</h3>
+          </MyButton>
+          <MyButton color="inherit">
+            <h3>Reward</h3>
+          </MyButton>
+          <MorePopup />
+        </MenuGroup>
+
+        {userSection}
+      </Toolbar>
+    </StyledAppBar>
+  );
 }
 
 export default Navbar;
