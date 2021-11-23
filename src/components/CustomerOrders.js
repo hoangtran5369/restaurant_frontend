@@ -12,17 +12,25 @@ import {
     Box, List, ListItem, ListItemText, Typography, Accordion, AccordionSummary, AccordionDetails
 } from "@material-ui/core";
 
-import { getAllItemDict, getItemById } from "store/FoodMenu/selector";
+import { getAllItemDict, getItemById, getAllAddonDict } from "store/FoodMenu/selector";
 import moment from "moment";
+import styled from "styled-components";
 
+
+const MyList = styled(List)`
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+`
 
 const OrderItem = (props) => {
     const { id, quantity, specialInstruction, addons, price } = props
     const menuItemDict = useSelector(getAllItemDict);
+    const addonDict = useSelector(getAllAddonDict);
     const menuItem = menuItemDict[id];
-    console.log(menuItem);
+
+    const itemAddons = addons.map(addon => addonDict[addon].name)
     if (!menuItem) {
-        console.log("NOPE")
         return <></>;
     }
     return (
@@ -36,9 +44,9 @@ const OrderItem = (props) => {
                     }
                     secondary={
                         <React.Fragment>
-                            {addons.map(addon => (
+                            {itemAddons.map(addon => (
                                 <Typography variant="body2" color="textSecondary">
-                                    -  {addon}
+                                    -  {addon || "Unavailable"}
                                 </Typography>
 
                             ))}
@@ -60,7 +68,6 @@ const OrderItem = (props) => {
 
 function OrderDisplay({ order }) {
     return (
-        <div>
             <Accordion>
                 <AccordionSummary>
                     <Typography>Ordered {moment(order.createdTime).calendar()}</Typography>
@@ -87,7 +94,6 @@ function OrderDisplay({ order }) {
                 </AccordionDetails>
             </Accordion>
 
-        </div>
     );
 }
 
@@ -120,11 +126,10 @@ function CustomerOrder(props) {
                 paddingTop="5vh"
             >
                 <h1>Your current orders</h1>
-                <List>
-                    <ListItem>
-                        {orders.map(order => <OrderDisplay order={order} />)}
-                    </ListItem>
-                </List>
+                <Box maxWidth="600px">
+
+                {orders.map(order => <OrderDisplay order={order} />)}
+                </Box>
             </Box>
             <Footer />
 
