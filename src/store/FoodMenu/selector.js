@@ -75,6 +75,16 @@ export const getAllItemDict = createSelector(
         {})
 )
 
+export const getItemById = createSelector(
+    getAllItemDict,
+    (_, id) => id,
+    (itemDict, id) => {
+        console.log(itemDict);
+        console.log(id);
+        return itemDict[id];
+    }
+)
+
 export const getFilteredItems = createSelector(
     isLoading, getCurrCategory,
     (loading, category) => loading ? [] : category.menuItems

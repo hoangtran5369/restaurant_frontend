@@ -28,3 +28,9 @@ export const getUserEmail = createSelector(
     (user) => user.email
 )
 
+export const getUserid = createSelector(
+    authSelector,
+    (user) => user.id
+)
+
+

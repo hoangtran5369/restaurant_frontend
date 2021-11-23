@@ -6,3 +6,8 @@ export const merchantIsLoading = createSelector(
     merchantSelector,
     (merchant) => merchant.loading
 )
+
+export const getMerchantId = createSelector(
+    merchantSelector,
+    (merchant) => merchant.id
+)
