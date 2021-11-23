@@ -29,7 +29,7 @@ export const orderNeedsReset = createSelector(
             .forEach(([orderKey, order]) => {
                 const { itemId, addonIds } = order;
                 if (!itemDict[itemId]) { needReset = true; }
-                for (const id in addonIds) {
+                for (const id of addonIds) {
                     if (!addonDict[id]) { needReset = true; }
                 }
             })
@@ -40,11 +40,13 @@ export const orderNeedsReset = createSelector(
 export const getOrderItemInfo = createSelector(
     getOrderItems, getAllItemDict, getAllAddonDict,
     (orderDict, itemDict, addonDict) => {
+
         return Object.entries(orderDict)
             .filter(([orderKey, order]) => {
-                const { itemId, addonIds, quantity, specialInstruction } = order;
+                const { itemId, addonIds } = order;
                 if (!itemDict[itemId]) { return false; }
-                for (const id in addonIds) {
+               
+                for (const id of addonIds) {
                     if (!addonDict[id]) { return false; }
                 }
                 return true;
@@ -188,7 +190,7 @@ export const getOrderData = createSelector(
         if (customerInfo.id !== "") {
             customer.id = customerInfo.id
         }
-        
+
         const delivery = {
             deliveryFee: 0,
             info: {
