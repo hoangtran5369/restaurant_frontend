@@ -80,7 +80,7 @@ import { resetOrder } from "store/Order/reducer";
 
     const onCheckoutFinished = () => {
       dispatch(resetOrder());
-      history.push('/menu');
+      history.push('/orders');
     }
   
     return (
