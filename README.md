@@ -17,3 +17,18 @@ aws configure
 ```bash
 npm install -g @aws-amplify/cli
 ```
+
+* Sync with current settings
+```bash
+amplify pull ddga3efkitzhs
+```
+
+* Add hosting
+```bash
+amplify add hosting
+```
+
+* publish
+```bash
+amplify publish
+```

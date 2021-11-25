@@ -1,6 +1,13 @@
 {
+  "hosting": {
+    "amplifyhosting": {
+      "service": "amplifyhosting",
+      "providerPlugin": "awscloudformation",
+      "type": "manual"
+    }
+  },
   "auth": {
-    "restaurantsite342d6518": {
+    "restaurantsitee286ee98": {
       "service": "Cognito",
       "serviceType": "imported",
       "providerPlugin": "awscloudformation",
@@ -9,7 +16,7 @@
     }
   },
   "storage": {
-    "restaurantsite20eb42ac": {
+    "restaurantsite0ee8a5f1": {
       "service": "S3",
       "serviceType": "imported",
       "providerPlugin": "awscloudformation",
