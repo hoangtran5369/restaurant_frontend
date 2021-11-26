@@ -7,7 +7,7 @@
     }
   },
   "auth": {
-    "restaurantsitee286ee98": {
+    "restaurantsitee9540396": {
       "service": "Cognito",
       "serviceType": "imported",
       "providerPlugin": "awscloudformation",

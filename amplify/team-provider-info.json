@@ -20,11 +20,18 @@
       },
       "auth": {
         "restaurantsite267b22b8": {},
-        "restaurantsitee286ee98": {
+        "restaurantsitee9540396": {
           "userPoolId": "us-east-2_Apoq12USk",
           "userPoolName": "restaurantadmin04cfe250_userpool_04cfe250-dev",
           "webClientId": "6pphmbebu62nlqom1cul7t81m7",
-          "nativeClientId": "6pphmbebu62nlqom1cul7t81m7"
+          "nativeClientId": "6pphmbebu62nlqom1cul7t81m7",
+          "identityPoolId": "us-east-2:0a3573e6-190c-44f9-aff7-232451007950",
+          "identityPoolName": "restaurantadmin04cfe250_identitypool_04cfe250__dev",
+          "allowUnauthenticatedIdentities": true,
+          "authRoleArn": "arn:aws:iam::956840736102:role/amplify-restaurantadmin-dev-154313-authRole",
+          "authRoleName": "amplify-restaurantadmin-dev-154313-authRole",
+          "unauthRoleArn": "arn:aws:iam::956840736102:role/amplify-restaurantadmin-dev-154313-unauthRole",
+          "unauthRoleName": "amplify-restaurantadmin-dev-154313-unauthRole"
         }
       },
       "storage": {
