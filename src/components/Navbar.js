@@ -95,7 +95,7 @@ function Navbar() {
   return (
     <StyledAppBar position="sticky" color="inherit">
       <Toolbar>
-        <Title variant="h4" onClick={() => history.push("/")}>
+        <Title variant="h4" style={{cursor:'pointer'}} onClick={() => history.push("/")}>
           Pho28
         </Title>
 

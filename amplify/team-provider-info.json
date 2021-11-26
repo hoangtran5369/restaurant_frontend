@@ -12,8 +12,15 @@
       "AmplifyAppId": "ddga3efkitzhs"
     },
     "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "ddga3efkitzhs",
+          "type": "manual"
+        }
+      },
       "auth": {
-        "restaurantsite342d6518": {
+        "restaurantsite267b22b8": {},
+        "restaurantsitee9540396": {
           "userPoolId": "us-east-2_Apoq12USk",
           "userPoolName": "restaurantadmin04cfe250_userpool_04cfe250-dev",
           "webClientId": "6pphmbebu62nlqom1cul7t81m7",
@@ -28,8 +35,8 @@
         }
       },
       "storage": {
-        "restaurantsite20eb42ac": {
-          "bucketName": "amplify-restaurantadmin-dev-154313-deployment",
+        "restaurantsite0ee8a5f1": {
+          "bucketName": "restaurantadmin6f10ac2eb7734631b044d481b99f7940154313-dev",
           "region": "us-east-2"
         }
       }
