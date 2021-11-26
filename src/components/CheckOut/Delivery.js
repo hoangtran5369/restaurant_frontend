@@ -9,7 +9,7 @@ import {
   InputLabel,
   Radio,
   RadioGroup,
-  TextField
+  TextField,
 } from "@material-ui/core";
 import styled from "styled-components";
 import OrderInfo from "components/CheckOut/OrderInfo";
@@ -31,12 +31,10 @@ const MyContainer = styled.div`
   margin-bottom: 30px;
 `;
 
-
 const FormContainer = styled.div`
   width: 50%;
   padding-right: 30px;
 `;
-
 
 const SubmitButton = styled(Button)`
   padding: 10px;
@@ -54,19 +52,23 @@ const MyText = styled.p`
 
 function Delivery({ onFinished }) {
   const dispatch = useDispatch();
-  const merchant = useSelector(merchantSelector)
+  const merchant = useSelector(merchantSelector);
   const [deliveryOption, setDeliveryOption] = useState("Pickup");
-  const storePickupTimeOption = useSelector(getPickupTimeOption)
-  const [pickUpTimeOption, setFormPickUpTimeOption] = useState(storePickupTimeOption);
-  const storePickupTime = useSelector(getPickupTime)
-  const earliestTime = moment().add(30, 'minutes').format().slice(0,16)
-  const [pickupTime, setFormPickupTime] = useState(earliestTime)
-  const [pickupTimeError, setPickupTimeError] = useState("")
+  const storePickupTimeOption = useSelector(getPickupTimeOption);
+  const [pickUpTimeOption, setFormPickUpTimeOption] = useState(
+    storePickupTimeOption
+  );
+  const storePickupTime = useSelector(getPickupTime);
+  const earliestTime = moment().add(30, "minutes").format().slice(0, 16);
+  const [pickupTime, setFormPickupTime] = useState(earliestTime);
+  const [pickupTimeError, setPickupTimeError] = useState("");
 
-  
   const validatePickupTime = (pickupTime) => {
-    return moment(pickupTime).isAfter(moment(earliestTime).subtract(1, "minutes"), "minute")
-  }
+    return moment(pickupTime).isAfter(
+      moment(earliestTime).subtract(1, "minutes"),
+      "minute"
+    );
+  };
 
   const onSubmit = () => {
     const pickupTimeIsValid = validatePickupTime(pickupTime);
@@ -74,29 +76,29 @@ function Delivery({ onFinished }) {
       dispatch(setPickupTime(pickupTime));
       onFinished();
     }
-  }
+  };
 
   useEffect(() => {
-    if (storePickupTime && validatePickupTime(storePickupTime)){
-      setFormPickupTime(storePickupTime)
+    if (storePickupTime && validatePickupTime(storePickupTime)) {
+      setFormPickupTime(storePickupTime);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     const pickupTimeIsValid = validatePickupTime(pickupTime);
     if (pickupTimeIsValid) {
-      setPickupTimeError("")
+      setPickupTimeError("");
     } else {
-      setPickupTimeError("Invalid Pickup Time")
+      setPickupTimeError("Invalid Pickup Time");
     }
-  }, [pickupTime])
+  }, [pickupTime]);
 
   useEffect(() => {
-    if(pickUpTimeOption === "now") {
-      setFormPickupTime(earliestTime)
+    if (pickUpTimeOption === "now") {
+      setFormPickupTime(earliestTime);
     }
-    dispatch(setPickupTimeOption(pickUpTimeOption))
-  }, [pickUpTimeOption])
+    dispatch(setPickupTimeOption(pickUpTimeOption));
+  }, [pickUpTimeOption]);
 
   return (
     <Box>
@@ -139,25 +141,23 @@ function Delivery({ onFinished }) {
                   label="Schedule for later"
                 />
               </RadioGroup>
-              
+
               {pickUpTimeOption === "later" && (
                 <Box>
-
                   <TextField
                     label="Pickup time"
                     type="datetime-local"
-                    error={pickupTimeError !==  ""}
-                    helperText={pickupTimeError !==  "" && "Invalid pickup time"}
+                    error={pickupTimeError !== ""}
+                    helperText={pickupTimeError !== "" && "Invalid pickup time"}
                     value={pickupTime}
                     onChange={(event) => setFormPickupTime(event.target.value)}
                     InputLabelProps={{
                       shrink: true,
                     }}
                   />
-    
                 </Box>
               )}
-               {(pickUpTimeOption === "now" || pickUpTimeOption === "later")&& (
+              {(pickUpTimeOption === "now" || pickUpTimeOption === "later") && (
                 <Box>
                   <MyText>Your order will be ready</MyText>
                   <MyText>{moment(pickupTime).calendar()}</MyText>
@@ -168,16 +168,15 @@ function Delivery({ onFinished }) {
               )}
             </Box>
           )}
-          
+
           {["Doordash", "Grubhub", "Ubereats"].includes(deliveryOption) && (
             <Box>
               <MyText>
                 <br />
-                This option is coming soon !
+                <h2>This option is coming soon !</h2>
               </MyText>
             </Box>
           )}
-
         </FormContainer>
 
         <OrderInfo></OrderInfo>

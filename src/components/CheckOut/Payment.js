@@ -12,17 +12,16 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import styled from "styled-components";
 import OrderInfo from "components/CheckOut/OrderInfo";
-import CreditCardInput from 'react-credit-card-input';
+import CreditCardInput from "react-credit-card-input";
 import { useDispatch, useSelector } from "react-redux";
 import { getCardInfo, getSubtotal, getTotal } from "store/Order/selector";
 import { setCardInfo, setClientSecret, submitOrder } from "store/Order/reducer";
-import {paymentIntent} from "store/Order/api"
+import { paymentIntent } from "store/Order/api";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import CardField from "components/CheckOut/CardField";
 import { StripeCardElementChangeEvent, StripeError } from "@stripe/stripe-js";
 import { ConsoleLogger } from "@aws-amplify/core";
 import { useState } from "react";
-
 
 const MyContainer = styled.div`
   display: flex;
@@ -55,14 +54,17 @@ function Payment({ onFinished }) {
   const [clientSecret, setClientSecret] = useState("");
   const cardInfo = useSelector(getCardInfo);
   const dispatch = useDispatch();
-  const {  handleSubmit, control, setError, clearErrors } = useForm({
-    defaultValues: cardInfo
-  })
+  const { handleSubmit, control, setError, clearErrors } = useForm({
+    defaultValues: cardInfo,
+  });
   const [value, setValue] = React.useState("credit");
-   useEffect (() => { 
-      dispatch(submitOrder()).then(result => setClientSecret(result.payload.payment.clientSecret))    
-      }, []);
-    
+
+  useEffect(() => {
+    dispatch(submitOrder()).then((result) =>
+      setClientSecret(result.payload.payment.clientSecret)
+    );
+  }, []);
+
   const handleChange = (event) => {
     setValue(event.target.value);
   };
@@ -72,35 +74,31 @@ function Payment({ onFinished }) {
     const cardElement = element.getElement(CardElement);
     if (cardElement) {
       const payload = await stripe.confirmCardPayment(clientSecret, {
-          payment_method: {
-            card: cardElement,
-          },
-        });
-        if (payload.error) {    
-          // console.log("Error", payload.error);
-        } else {
-          // console.log("Success", payload);         
-          onFinished();
-        }
+        payment_method: {
+          card: cardElement,
+        },
+      });
+      if (payload.error) {
+        // console.log("Error", payload.error);
+      } else {
+        // console.log("Success", payload);
+        onFinished();
       }
+    }
 
-      setLoading(false);
-   
-  }
+    setLoading(false);
+  };
 
   const clearErrorsBeforeChange = (changeHandler) => (e) => {
     clearErrors();
     changeHandler(e);
-  }
-
-
+  };
 
   return (
-    <Box>    
+    <Box>
       <form>
         <MyContainer>
           <FormContainer>
-
             <RadioGroup value={value} onChange={handleChange}>
               <FormControlLabel
                 value="credit"
@@ -114,48 +112,51 @@ function Payment({ onFinished }) {
               />
               <FormControlLabel value="cash" control={<Radio />} label="Cash" />
             </RadioGroup>
-            {value === "credit" && (
-              <CardField />               
-            )}
+            {value === "credit" && <CardField />}
             {value === "paypal" && (
               <Box>
                 <MyText>
-                  You will be redirected to PayPal to authorize payment, once you
-                  return you will be able to complete the order.
-              </MyText>
+                  You will be redirected to PayPal to authorize payment, once
+                  you return you will be able to complete the order.
+                </MyText>
               </Box>
             )}
             {value === "cash" && (
               <Box>
                 <MyText>
-                  Please make the payment at the counter / cashier to finish this
-                  order!.
-              </MyText>
+                  Please make the payment at the counter / cashier to finish
+                  this order!.
+                </MyText>
               </Box>
             )}
-            <Divider />
+            {/* <Divider />
             <br />
-          Coupon code:
-          <Box>
+            Coupon code:
+            <Box>
               <TextField
                 id="couponCode"
                 label="Enter the coupon code"
                 variant="outlined"
               />
-            </Box>
+            </Box> */}
           </FormContainer>
 
           <OrderInfo></OrderInfo>
         </MyContainer>
 
         <Divider variant="middle" />
-          {loading ? 
+        {loading ? (
           <LinearProgress color="secondary" />
-          :
-          <SubmitButton onClick={handleSubmit(onSubmit)} color="primary" fullWidth variant="contained">
+        ) : (
+          <SubmitButton
+            onClick={handleSubmit(onSubmit)}
+            color="primary"
+            fullWidth
+            variant="contained"
+          >
             Confirm Payment
           </SubmitButton>
-          }
+        )}
       </form>
     </Box>
   );

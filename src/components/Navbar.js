@@ -112,10 +112,10 @@ function Navbar() {
           >
             <h3>Reservation</h3>
           </MyButton>
-          <MyButton color="inherit">
-            <h3>Reward</h3>
+          <MyButton color="inherit" onClick={() => history.push("/about")}>
+            <h3>About</h3>
           </MyButton>
-          <MorePopup />
+          {/* <MorePopup /> */}
         </MenuGroup>
 
         {userSection}
